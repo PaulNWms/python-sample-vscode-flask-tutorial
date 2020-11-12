@@ -1,0 +1,67 @@
+name: Azure Pipelines
+variables:
+  python.version: '3.7.6'
+stages:
+- stage: Build
+  jobs:
+  - job: Build
+    pool:
+      name: Hosted Ubuntu 1804
+    steps:
+    # Needed for Terraform VM deployment
+    - task: InstallSSHKey@0
+      inputs:
+        knownHostsEntry: '51.141.161.98 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBKKDgro03HeDROeIiqtOvc9RHTaM4AkN/XQza2xtHoE17QRocZ9Fl92Ee8+fbziQs6lUus+yxqga5ZkV0KlYp8Q='
+        sshPublicKey: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC0Ol53Rp9MoyCRrcXwpuHbSXpvvHNT24dMy3NCnL8OD5bc2ywBMmAZAvc0BQoBZ8MxL9O67oaPENA/+C1UojdtHSyBfYXYZxRKiqFyrRTdYCqcFZ/brZfCxIeQJ7FWs5TKA2/CRMaudClnwZrrpKe8ihZyjEOyHT7AK3tHD00ixFnJ6M6WPwEEaRg0ZHMkrDKLa4+ikgg6d+cwWN80YJvpJUKgR+Qss7SD4aKI8lsXUf7KWNQgfGoppcAIdOpt95VFxUF5WzCNn8JT4a0xQdijftfeOgno2F7MITI3DLz3enk1Q4Ieo7nTxCnDM8KQUB+M0FDhQ6Tr6HQPEPKV75Cd paulw@PAUL-DESKTOP-1'
+        sshKeySecureFile: 'id_rsa'
+    - task: ArchiveFiles@2
+      displayName: 'Archive FakeRestAPI'
+      inputs:
+        rootFolderOrFile: 'path/to/fakerestapi'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-fakerestapi.zip'
+    - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId)-fakerestapi.zip
+      displayName: 'Upload Package'
+      artifact: drop-fakerestapi
+- stage:
+  jobs:
+  - deployment: FakeRestAPI
+    pool:
+      vmImage: 'Ubuntu-18.04'
+    environment: 'TEST'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: AzureWebApp@1
+            displayName: 'Deploy Azure Web App'
+            inputs:
+              azureSubscription: ''
+              appName: ''
+              appType: webApp
+              package: $(Pipeline.Workspace)/drop-fakerestapi/$(Build.BuildId)-fakerestapi.zip
+  - deployment: VMDeploy
+    displayName: NAME
+    environment:
+      name:  ENVIRONMENT NAME
+      resourceType: VirtualMachine
+      tags: TAG NAME
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: Bash@3
+            inputs:
+              targetType: 'inline'
+              script: |
+                #! /bin/bash
+              
+                sudo apt-get upgrade -y
+                sudo apt-get install python3-pip -y
+                sudo apt-get install unzip -y
+                sudo apt-get install -y chromium-browser
+                pip3 install selenium
+                export PATH=$PATH:some/path
+
+
