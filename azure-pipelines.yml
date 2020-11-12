@@ -12,7 +12,7 @@ stages:
     - task: InstallSSHKey@0
       inputs:
         knownHostsEntry: '52.137.113.60'
-        sshPublicKey: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC0Ol53Rp9MoyCRrcXwpuHbSXpvvHNT24dMy3NCnL8OD5bc2ywBMmAZAvc0BQoBZ8MxL9O67oaPENA/+C1UojdtHSyBfYXYZxRKiqFyrRTdYCqcFZ/brZfCxIeQJ7FWs5TKA2/CRMaudClnwZrrpKe8ihZyjEOyHT7AK3tHD00ixFnJ6M6WPwEEaRg0ZHMkrDKLa4+ikgg6d+cwWN80YJvpJUKgR+Qss7SD4aKI8lsXUf7KWNQgfGoppcAIdOpt95VFxUF5WzCNn8JT4a0xQdijftfeOgno2F7MITI3DLz3enk1Q4Ieo7nTxCnDM8KQUB+M0FDhQ6Tr6HQPEPKV75Cd'
+        sshPublicKey: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC5fEsd2ifo3jadqEs+ndu/sOeGAcWVih2GsRLiFs13xtcFpgLPAHuvKqKPzqhFfYRnuXNXnPtc181RROi+Q4QGKJVTOsEz2ypEIeoTpkysNPIN9MZIVCuo0Nf4A8Q92GcGwnD1Rc56YBOeelPh69Fkg5/LuoiRTEUga0eknm2CGxK83c8qGUCVOafZYwGH1gAivYJq1rpH2JoSHpSq+bxppt1FngcMMMxA1vjg2e74RW43W/h5jq8NKaEyU/q86892mcDi3BYUECJlGITnK8l4qYnRKyfS3005hNp5Dd262/TU5ZS1UuIAHAig8ks+5DO8j9uvP2nlrfjoAuPhiRoZ adminuser@myapp-vm'
         sshKeySecureFile: 'id_rsa'
     - task: ArchiveFiles@2
       displayName: 'Archive FakeRestAPI'
