@@ -8,17 +8,17 @@ stages:
     pool:
       name: Hosted Ubuntu 1604
     steps:
-    #- task: CopyFiles@2
-    #  inputs:
-    #    SourceFolder: 'terraform/environments/test'
-    #    Contents: '**'
-    #    TargetFolder: '$(Build.ArtifactStagingDirectory)'
-    #- task: PublishBuildArtifacts@1
-    #  inputs:
-    #    ArtifactName: 'drop'
-    #- task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@0
-    #    displayName: 'Install Terraform'
-    # Needed for Terraform VM deployment
+    - task: CopyFiles@2
+      inputs:
+        SourceFolder: 'terraform/environments/test'
+        Contents: '**'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    - task: PublishBuildArtifacts@1
+      inputs:
+        ArtifactName: 'drop'
+    - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@0
+        displayName: 'Install Terraform'
+     Needed for Terraform VM deployment
     - task: InstallSSHKey@0
       inputs:
         knownHostsEntry: '52.143.70.125 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBOM+qPK8T+HlsJ5+LaXMIsoiu7smcvK+lDvtoizJzu4kEd7oSWNYymvNu64ou+BaOg4dhGFWOaoXsEDQVuRwZyg='
