@@ -41,6 +41,12 @@ stages:
         command: plan
         workingDirectory: '$(workingDirectory)'
         environmentServiceNameAzureRM: '$(subscription)'
+    - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV1@0
+      displayName: 'Terraform : apply'
+      inputs:
+        command: apply
+        workingDirectory: '$(workingDirectory)'
+        environmentServiceNameAzureRM: '$(subscription)'
     # Needed for Terraform VM deployment
     - task: InstallSSHKey@0
       inputs:
