@@ -4,7 +4,7 @@ variables:
   subscription: 'Wiggly World Connection'
   resourceGroup: 'cloud-shell-storage-westus'
   storageAccount: 'cs410037ffe9899b74b'
-  containerName: ''
+  containerName: 'tstate'
 stages:
 - stage: Build
   jobs:
