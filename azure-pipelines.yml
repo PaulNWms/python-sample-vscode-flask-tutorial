@@ -31,7 +31,7 @@ stages:
         backendAzureRmResourceGroupName: '$(resourceGroup)'
         backendAzureRmStorageAccountName: '$(storageAccount)'
         backendAzureRmContainerName: '$(containerName)'
-        backendAzureRmKey: 'terraform.tfstate'
+        backendAzureRmKey: '3+VLo8yNpOzW01P9QTe8alLGBIy9rCE2dWnGrX3566IRHYjOA9sZsegEaJqH6y5MlrhfBvxBa06N9jUznawG1Q=='
     # Needed for Terraform VM deployment
     - task: InstallSSHKey@0
       inputs:
