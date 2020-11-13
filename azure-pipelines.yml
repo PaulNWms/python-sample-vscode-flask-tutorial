@@ -10,8 +10,8 @@ stages:
   jobs:
   - job: Build
     pool:
-      name: Hosted Ubuntu 1604
-      #vmImage: 'ubuntu-latest'
+      #name: Hosted Ubuntu 1604
+      vmImage: 'ubuntu-latest'
     steps:
     - task: CopyFiles@2
       inputs:
