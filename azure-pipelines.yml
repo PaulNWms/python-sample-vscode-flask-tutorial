@@ -2,9 +2,9 @@ name: Azure Pipelines
 variables:
   python.version: '3.7.6'
 stages:
-- stage: Build
+- stage: Create_Infrastructure
   jobs:
-  - job: Build
+  - job: Terraform
     pool:
       name: Hosted Ubuntu 1604
     steps:
@@ -13,6 +13,7 @@ stages:
         SourceFolder: 'terraform/environments/test'
         Contents: '**'
         TargetFolder: '$(Build.ArtifactStagingDirectory)'
+- stage: Build
     #- task: PublishBuildArtifacts@1
     #  inputs:
     #    ArtifactName: 'drop'
