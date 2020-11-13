@@ -1,6 +1,10 @@
 name: Azure Pipelines
 variables:
   python.version: '3.7.6'
+  subscription: '382e9492-020f-4300-b96a-8e5b88fc422a'
+  resourceGroup: 'cloud-shell-storage-westus'
+  storageAccount: 'cs410037ffe9899b74b'
+  containerName: ''
 stages:
 - stage: Build
   jobs:
