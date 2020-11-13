@@ -2,9 +2,9 @@ name: Azure Pipelines
 variables:
   python.version: '3.7.6'
 stages:
-- stage: Create_Infrastructure
+- stage: Build
   jobs:
-  - job: Create_Infrastructure
+  - job: Build
     pool:
       name: Hosted Ubuntu 1604
     steps:
@@ -18,12 +18,6 @@ stages:
         ArtifactName: 'drop'
     - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@0
         displayName: 'Install Terraform'
-- stage: Build
-  jobs:
-  - job: Build
-    pool:
-      name: Hosted Ubuntu 1604
-    steps:
     # Needed for Terraform VM deployment
     - task: InstallSSHKey@0
       inputs:
