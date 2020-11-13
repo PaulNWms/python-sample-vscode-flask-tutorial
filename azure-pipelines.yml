@@ -5,7 +5,8 @@ variables:
   resourceGroup: 'tstate'
   storageAccount: 'tstate32087'
   containerName: 'tstate'
-  key: '3+VLo8yNpOzW01P9QTe8alLGBIy9rCE2dWnGrX3566IRHYjOA9sZsegEaJqH6y5MlrhfBvxBa06N9jUznawG1Q=='
+  accessKey: '3+VLo8yNpOzW01P9QTe8alLGBIy9rCE2dWnGrX3566IRHYjOA9sZsegEaJqH6y5MlrhfBvxBa06N9jUznawG1Q=='
+  workingDirectory: '$(Build.ArtifactStagingDirectory)/environments/test'
 stages:
 - stage: Build
   jobs:
@@ -28,11 +29,17 @@ stages:
       displayName: 'Terraform : init'
       inputs:
         backendServiceArm: '$(subscription)'
-        workingDirectory: '$(Build.ArtifactStagingDirectory)/environments/test'
+        workingDirectory: '$(workingDirectory)'
         backendAzureRmResourceGroupName: '$(resourceGroup)'
         backendAzureRmStorageAccountName: '$(storageAccount)'
         backendAzureRmContainerName: '$(containerName)'
-        backendAzureRmKey: '$(key)'
+        backendAzureRmKey: '$(accessKey)'
+    - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV1@0
+      displayName: 'Terraform : plan'
+      inputs:
+        command: plan
+        workingDirectory: '$(workingDirectory)'
+        environmentServiceNameAzureRM: '$(subscription)'
     # Needed for Terraform VM deployment
     - task: InstallSSHKey@0
       inputs:
