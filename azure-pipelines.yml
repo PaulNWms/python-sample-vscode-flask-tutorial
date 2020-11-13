@@ -10,8 +10,8 @@ stages:
   jobs:
   - job: Build
     pool:
-      #name: Hosted Ubuntu 1604
-      vmImage: 'ubuntu-latest'
+      name: Hosted Ubuntu 1604
+      #vmImage: 'ubuntu-latest'
     steps:
     - task: CopyFiles@2
       inputs:
@@ -31,7 +31,7 @@ stages:
         backendAzureRmResourceGroupName: '$(resourceGroup)'
         backendAzureRmStorageAccountName: '$(storageAccount)'
         backendAzureRmContainerName: '$(containerName)'
-        backendAzureRmKey: terraform.tfstate
+        backendAzureRmKey: 'terraform.tfstate'
     # Needed for Terraform VM deployment
     - task: InstallSSHKey@0
       inputs:
