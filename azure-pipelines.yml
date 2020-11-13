@@ -18,7 +18,7 @@ stages:
       inputs:
         ArtifactName: 'drop'
     - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@0
-        displayName: 'Install Terraform'
+      displayName: 'Install Terraform'
     # Needed for Terraform VM deployment
     - task: InstallSSHKey@0
       inputs:
