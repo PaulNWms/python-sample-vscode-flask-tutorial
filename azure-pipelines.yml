@@ -16,6 +16,17 @@ stages:
       name: Hosted Ubuntu 1604
       #vmImage: 'ubuntu-latest'
     steps:
+    - task: Bash@3
+      displayName: 'Remove Existing Resource Group'
+      inputs:
+        targetType: 'inline'
+        script: |
+          #! /bin/bash
+
+          if [`az group exists --name wiggly-world`];
+          then
+            `az group delete --name wiggly-world --yes`
+          fi
     - task: CopyFiles@2
       inputs:
         SourceFolder: 'terraform'
