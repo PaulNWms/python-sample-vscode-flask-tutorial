@@ -2,9 +2,9 @@ name: Azure Pipelines
 variables:
   python.version: '3.7.6'
 stages:
-- stage: Create_Infrastructure
+- stage: Build
   jobs:
-  - job: Terraform
+  - job: Build
     pool:
       name: Hosted Ubuntu 1604
     steps:
@@ -13,10 +13,9 @@ stages:
         SourceFolder: 'terraform/environments/test'
         Contents: '**'
         TargetFolder: '$(Build.ArtifactStagingDirectory)'
-- stage: Build
-    #- task: PublishBuildArtifacts@1
-    #  inputs:
-    #    ArtifactName: 'drop'
+    - task: PublishBuildArtifacts@1
+      inputs:
+        ArtifactName: 'drop'
     #- task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@0
     #    displayName: 'Install Terraform'
     # Needed for Terraform VM deployment
