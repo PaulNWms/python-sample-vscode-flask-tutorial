@@ -22,7 +22,7 @@ resource "azurerm_linux_virtual_machine" "test" {
   ]
   admin_ssh_key {
     username   = "adminuser"
-    public_key = file("~/.ssh/authorized_keys")
+    public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC0Ol53Rp9MoyCRrcXwpuHbSXpvvHNT24dMy3NCnL8OD5bc2ywBMmAZAvc0BQoBZ8MxL9O67oaPENA/+C1UojdtHSyBfYXYZxRKiqFyrRTdYCqcFZ/brZfCxIeQJ7FWs5TKA2/CRMaudClnwZrrpKe8ihZyjEOyHT7AK3tHD00ixFnJ6M6WPwEEaRg0ZHMkrDKLa4+ikgg6d+cwWN80YJvpJUKgR+Qss7SD4aKI8lsXUf7KWNQgfGoppcAIdOpt95VFxUF5WzCNn8JT4a0xQdijftfeOgno2F7MITI3DLz3enk1Q4Ieo7nTxCnDM8KQUB+M0FDhQ6Tr6HQPEPKV75Cd"
   }
   os_disk {
     caching           = "ReadWrite"
