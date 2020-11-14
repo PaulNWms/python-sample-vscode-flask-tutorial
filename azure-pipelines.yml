@@ -6,7 +6,8 @@ variables:
   storageAccount: 'tstate32087'
   containerName: 'tstate'
   accessKey: '3+VLo8yNpOzW01P9QTe8alLGBIy9rCE2dWnGrX3566IRHYjOA9sZsegEaJqH6y5MlrhfBvxBa06N9jUznawG1Q=='
-  workingDirectory: '$(Build.ArtifactStagingDirectory)/environments/test'
+  tfWorkingDirectory: '$(Build.ArtifactStagingDirectory)/environments/test'
+  newmanWorkingDirectory: '$(System.DefaultWorkingDirectory)/automatedtesting/postman'
   sshPublicKey: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC0Ol53Rp9MoyCRrcXwpuHbSXpvvHNT24dMy3NCnL8OD5bc2ywBMmAZAvc0BQoBZ8MxL9O67oaPENA/+C1UojdtHSyBfYXYZxRKiqFyrRTdYCqcFZ/brZfCxIeQJ7FWs5TKA2/CRMaudClnwZrrpKe8ihZyjEOyHT7AK3tHD00ixFnJ6M6WPwEEaRg0ZHMkrDKLa4+ikgg6d+cwWN80YJvpJUKgR+Qss7SD4aKI8lsXUf7KWNQgfGoppcAIdOpt95VFxUF5WzCNn8JT4a0xQdijftfeOgno2F7MITI3DLz3enk1Q4Ieo7nTxCnDM8KQUB+M0FDhQ6Tr6HQPEPKV75Cd paulw@PAUL-DESKTOP-1'
 stages:
 - stage: Build
@@ -14,19 +15,7 @@ stages:
   - job: Build
     pool:
       name: Hosted Ubuntu 1604
-      #vmImage: 'ubuntu-latest'
     steps:
-    - task: Bash@3
-      displayName: 'Remove Existing Resource Group'
-      inputs:
-        targetType: 'inline'
-        script: |
-          #! /bin/bash
-
-          if [`az group exists --name wiggly-world`];
-          then
-            `az group delete --name wiggly-world --yes`
-          fi
     - task: CopyFiles@2
       inputs:
         SourceFolder: 'terraform'
@@ -41,7 +30,7 @@ stages:
       displayName: 'Terraform : init'
       inputs:
         backendServiceArm: '$(subscription)'
-        workingDirectory: '$(workingDirectory)'
+        WorkingDirectory: '$(tfWorkingDirectory)'
         backendAzureRmResourceGroupName: '$(resourceGroup)'
         backendAzureRmStorageAccountName: '$(storageAccount)'
         backendAzureRmContainerName: '$(containerName)'
@@ -50,13 +39,13 @@ stages:
       displayName: 'Terraform : plan'
       inputs:
         command: plan
-        workingDirectory: '$(workingDirectory)'
+        workingDirectory: '$(tfWorkingDirectory)'
         environmentServiceNameAzureRM: '$(subscription)'
     - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV1@0
       displayName: 'Terraform : apply'
       inputs:
         command: apply
-        workingDirectory: '$(workingDirectory)'
+        workingDirectory: '$(tfWorkingDirectory)'
         environmentServiceNameAzureRM: '$(subscription)'
     # Needed for Terraform VM deployment
     - task: InstallSSHKey@0
@@ -74,6 +63,15 @@ stages:
     - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId)-fakerestapi.zip
       displayName: 'Upload Package'
       artifact: drop-fakerestapi
+    - task: Bash@3
+      displayName: 'Newman : install'
+      workingDirectory: $(newmanWorkingDirectory)
+      inputs:
+        targetType: 'inline'
+        script: |
+          #! /bin/bash
+
+          npm install -g newman
 - stage:
   jobs:
   - deployment: FakeRestAPI
