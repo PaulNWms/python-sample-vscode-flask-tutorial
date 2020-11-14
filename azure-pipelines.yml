@@ -65,7 +65,7 @@ stages:
       artifact: drop-fakerestapi
     - task: Bash@3
       displayName: 'Newman : install'
-      workingDirectory: $(newmanWorkingDirectory)
+      workingDirectory: '$(newmanWorkingDirectory)''
       inputs:
         targetType: 'inline'
         script: |
