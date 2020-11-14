@@ -63,7 +63,7 @@ stages:
     - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId)-fakerestapi.zip
       displayName: 'Upload Package'
       artifact: drop-fakerestapi
-  - job: Integration Test
+  - job: Integration_Test
     pool:
       name: Hosted Ubuntu 1604
     steps:
