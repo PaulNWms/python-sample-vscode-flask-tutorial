@@ -7,7 +7,7 @@ tenant_id = "73c04330-4060-4165-8322-0cbb3d5f25d0"
 # Resource Group/Location
 location = "westus2"
 resource_group = "wiggly-world"
-application_type = "myapp"
+application_type = "wiggly"
 
 # Network
 virtual_network_name = "mynetwork"

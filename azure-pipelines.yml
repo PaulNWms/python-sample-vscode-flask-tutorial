@@ -71,7 +71,7 @@ stages:
         script: |
           #! /bin/bash
 
-          npm install -g newman
+          sudo npm install -g newman
 - stage:
   jobs:
   - deployment: FakeRestAPI
