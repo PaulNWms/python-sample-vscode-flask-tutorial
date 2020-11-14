@@ -78,7 +78,7 @@ stages:
         workingDirectory: '$(newmanWorkingDirectory)'
         script: |
           #! /bin/bash
-          newman run Wiggly-World.postman_collection.json -e Wiggly-World.postman_environment.json --reporters cli,json --reporter-json-export integration-test-results.json
+          newman run Wiggly-World.postman_collection.json -e Wiggly-World.postman_environment.json --reporters "cli,json" --reporter-json-export integration-test-results.json
     - publish: '$(newmanWorkingDirectory)/integration-test-results.json'
       displayName: 'Newman  Publish Integration Test Results'
       artifact: drop-integration-test-results
