@@ -82,7 +82,7 @@ stages:
                  -e Wiggly-World.postman_environment.json \
                  -r "cli,json" \
                  --reporter-json-export integration-test-results.json
-    - publish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-integration-test-results.json'
+    - publish: '$(newmanWorkingDirectory)/integration-test-results.json'
       displayName: 'Newman: publish artifacts'
       artifact: drop-integration-test-results
 - stage:
