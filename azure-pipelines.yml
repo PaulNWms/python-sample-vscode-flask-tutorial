@@ -63,28 +63,28 @@ stages:
     - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId)-fakerestapi.zip
       displayName: 'Upload Package'
       artifact: drop-fakerestapi
-    - task: Bash@3
-      displayName: 'Newman: install'
-      inputs:
-        targetType: 'inline'
-        workingDirectory: '$(newmanWorkingDirectory)'
-        script: |
-          #! /bin/bash
-          sudo npm install -g newman
-    - task: Bash@3
-      displayName: 'Newman: run'
-      inputs:
-        targetType: 'inline'
-        workingDirectory: '$(newmanWorkingDirectory)'
-        script: |
-          #! /bin/bash
-          newman run Wiggly-World.postman_collection.json \
-                 -e Wiggly-World.postman_environment.json \
-                 -r "cli,json" \
-                 --reporter-json-export integration-test-results.json
-    - publish: '$(newmanWorkingDirectory)/integration-test-results.json'
-      displayName: 'Newman: publish artifacts'
-      artifact: drop-integration-test-results
+#    - task: Bash@3
+#      displayName: 'Newman: install'
+#      inputs:
+#        targetType: 'inline'
+#        workingDirectory: '$(newmanWorkingDirectory)'
+#        script: |
+#          #! /bin/bash
+#          sudo npm install -g newman
+#    - task: Bash@3
+#      displayName: 'Newman: run'
+#      inputs:
+#        targetType: 'inline'
+#        workingDirectory: '$(newmanWorkingDirectory)'
+#        script: |
+#          #! /bin/bash
+#          newman run Wiggly-World.postman_collection.json \
+#                 -e Wiggly-World.postman_environment.json \
+#                 -r "cli,json" \
+#                 --reporter-json-export integration-test-results.json
+#    - publish: '$(newmanWorkingDirectory)/integration-test-results.json'
+#      displayName: 'Newman: publish artifacts'
+#      artifact: drop-integration-test-results
 - stage:
   jobs:
   - deployment: FakeRestAPI
@@ -99,7 +99,7 @@ stages:
             displayName: 'Deploy Azure Web App'
             inputs:
               azureSubscription: '$(subscription)'
-              appName: 'wiggly-AppService'
+              appName: 'FakeRestAPI'
               appType: webApp
               package: $(Pipeline.Workspace)/drop-fakerestapi/$(Build.BuildId)-fakerestapi.zip
   - deployment: VMDeploy
