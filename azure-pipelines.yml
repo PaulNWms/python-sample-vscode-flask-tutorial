@@ -1,13 +1,12 @@
 name: Azure Pipelines
 variables:
   python.version: '3.7.6'
-  connection: 'Wiggly World Connection'
-  subscriptionID: '382e9492-020f-4300-b96a-8e5b88fc422a'
-  resourceGroup: 'tstate'
-  storageAccount: 'tstate32087'
-  containerName: 'tstate'
-  accessKey: '3+VLo8yNpOzW01P9QTe8alLGBIy9rCE2dWnGrX3566IRHYjOA9sZsegEaJqH6y5MlrhfBvxBa06N9jUznawG1Q=='
+  tfResourceGroup: 'tstate'
+  tfStorageAccount: 'tstate32087'
+  tfContainerName: 'tstate'
   tfWorkingDirectory: '$(Build.ArtifactStagingDirectory)/environments/test'
+  connection: 'Wiggly World Connection'
+  accessKey: '3+VLo8yNpOzW01P9QTe8alLGBIy9rCE2dWnGrX3566IRHYjOA9sZsegEaJqH6y5MlrhfBvxBa06N9jUznawG1Q=='
   newmanWorkingDirectory: '$(System.DefaultWorkingDirectory)/automatedtesting/postman'
   sshPublicKey: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC0Ol53Rp9MoyCRrcXwpuHbSXpvvHNT24dMy3NCnL8OD5bc2ywBMmAZAvc0BQoBZ8MxL9O67oaPENA/+C1UojdtHSyBfYXYZxRKiqFyrRTdYCqcFZ/brZfCxIeQJ7FWs5TKA2/CRMaudClnwZrrpKe8ihZyjEOyHT7AK3tHD00ixFnJ6M6WPwEEaRg0ZHMkrDKLa4+ikgg6d+cwWN80YJvpJUKgR+Qss7SD4aKI8lsXUf7KWNQgfGoppcAIdOpt95VFxUF5WzCNn8JT4a0xQdijftfeOgno2F7MITI3DLz3enk1Q4Ieo7nTxCnDM8KQUB+M0FDhQ6Tr6HQPEPKV75Cd paulw@PAUL-DESKTOP-1'
 stages:
@@ -32,9 +31,9 @@ stages:
       inputs:
         backendServiceArm: '$(connection)'
         WorkingDirectory: '$(tfWorkingDirectory)'
-        backendAzureRmResourceGroupName: '$(resourceGroup)'
-        backendAzureRmStorageAccountName: '$(storageAccount)'
-        backendAzureRmContainerName: '$(containerName)'
+        backendAzureRmResourceGroupName: '$(tfResourceGroup)'
+        backendAzureRmStorageAccountName: '$(tfStorageAccount)'
+        backendAzureRmContainerName: '$(tfContainerName)'
         backendAzureRmKey: '$(accessKey)'
     - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV1@0
       displayName: 'Terraform : plan'
@@ -99,10 +98,10 @@ stages:
           - task: AzureWebApp@1
             displayName: 'Deploy Azure Web App'
             inputs:
-              azureSubscription: '$(subscriptionID)'
+              azureSubscription: '$(connection)'
               appName: 'wiggly-api'
-              appType: webApp
-              package: $(Pipeline.Workspace)/drop-fakerestapi/$(Build.BuildId)-fakerestapi.zip
+              appType: 'webApp'
+              package: '$(Pipeline.Workspace)/drop-fakerestapi/$(Build.BuildId)-fakerestapi.zip'
   - deployment: VMDeploy
     displayName: NAME
     environment:
