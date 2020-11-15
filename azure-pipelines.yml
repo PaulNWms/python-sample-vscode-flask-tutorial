@@ -1,7 +1,8 @@
 name: Azure Pipelines
 variables:
   python.version: '3.7.6'
-  subscription: 'Wiggly World Connection'
+  connection: 'Wiggly World Connection'
+  subscriptionID: '382e9492-020f-4300-b96a-8e5b88fc422a'
   resourceGroup: 'tstate'
   storageAccount: 'tstate32087'
   containerName: 'tstate'
@@ -29,7 +30,7 @@ stages:
     - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV1@0
       displayName: 'Terraform : init'
       inputs:
-        backendServiceArm: '$(subscription)'
+        backendServiceArm: '$(connection)'
         WorkingDirectory: '$(tfWorkingDirectory)'
         backendAzureRmResourceGroupName: '$(resourceGroup)'
         backendAzureRmStorageAccountName: '$(storageAccount)'
@@ -40,13 +41,13 @@ stages:
       inputs:
         command: plan
         workingDirectory: '$(tfWorkingDirectory)'
-        environmentServiceNameAzureRM: '$(subscription)'
+        environmentServiceNameAzureRM: '$(connection)'
     - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV1@0
       displayName: 'Terraform : apply'
       inputs:
         command: apply
         workingDirectory: '$(tfWorkingDirectory)'
-        environmentServiceNameAzureRM: '$(subscription)'
+        environmentServiceNameAzureRM: '$(connection)'
     # Needed for Terraform VM deployment
     - task: InstallSSHKey@0
       inputs:
@@ -98,7 +99,7 @@ stages:
           - task: AzureWebApp@1
             displayName: 'Deploy Azure Web App'
             inputs:
-              azureSubscription: '$(subscription)'
+              azureSubscription: '$(subscriptionID)'
               appName: 'wiggly-api'
               appType: webApp
               package: $(Pipeline.Workspace)/drop-fakerestapi/$(Build.BuildId)-fakerestapi.zip
