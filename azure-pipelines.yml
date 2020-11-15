@@ -100,12 +100,12 @@ stages:
             inputs:
               azureSubscription: '$(connection)'
               appName: 'wiggly-api'
-              appType: 'webApp'
+              appType: 'webAppLinux'
               package: '$(Pipeline.Workspace)/drop-fakerestapi/$(Build.BuildId)-fakerestapi.zip'
   - deployment: VMDeploy
-    displayName: NAME
+    displayName: VMDeploy
     environment:
-      name:  ENVIRONMENT NAME
+      name:  'test'
       resourceType: VirtualMachine
       tags: TAG NAME
     strategy:
