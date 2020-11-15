@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "1e7a98f1-0c0f-4a14-9d83-0336cf7684f0",
+		"_postman_id": "927fbd13-e9e7-4d18-b098-3ecf972ab93b",
 		"name": "Wiggly-World",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -11,12 +11,25 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "2ad469a9-dd92-43b4-97b1-0e60a6509dfb",
+						"id": "25e6c880-5703-427d-b59f-e15f04758ea4",
 						"exec": [
-							"pm.test(\"Successful response\", function () {",
-							"    pm.expect(pm.response.text()).to.include(\"success\");",
-							"});",
-							"var json = pm.response.json();",
+							"pm.test(\"Response must be valid and have a non-empty JSON body\", function () {\r",
+							"     pm.response.to.be.ok;\r",
+							"     pm.response.to.be.withBody;\r",
+							"     pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Successful response\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.status).to.eql(\"success\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Record added\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.message).to.contain(\"Record has been added\");\r",
+							"});\r",
+							"\r",
+							"var json = pm.response.json();\r",
 							"pm.environment.set(\"id\", json.data.id);"
 						],
 						"type": "text/javascript"
@@ -28,7 +41,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"{{name}}\",\n    \"salary\": \"{{salary}}\",\n    \"age\": \"{{age}}\"\n}",
+					"raw": "{\r\n    \"name\": \"{{name}}\",\r\n    \"salary\": \"{{salary}}\",\r\n    \"age\": \"{{age}}\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -36,17 +49,9 @@
 					}
 				},
 				"url": {
-					"raw": "http://dummy.restapiexample.com/api/v1/create",
-					"protocol": "http",
+					"raw": "{{create_url}}",
 					"host": [
-						"dummy",
-						"restapiexample",
-						"com"
-					],
-					"path": [
-						"api",
-						"v1",
-						"create"
+						"{{create_url}}"
 					]
 				}
 			},
@@ -58,40 +63,88 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "9b823313-3573-46ff-a31b-491cc3448b99",
+						"id": "378c7244-795a-4e50-8545-5748c5a3d858",
 						"exec": [
-							"pm.test(\"Response must be valid and have a JSON body\", function () {",
-							"     pm.response.to.be.ok;",
-							"     pm.response.to.be.withBody;",
-							"     pm.response.to.be.json;",
-							"});",
-							"",
-							"pm.test(\"Successful response\", function () {",
-							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.status).to.eql(\"success\");",
-							"});",
-							"",
-							"pm.test(\"Fetched all records\", function () {",
-							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.message).to.contain(\"All records\");",
-							"});",
-							"",
-							"pm.test(\"Response has more than one employee\", function () {",
-							"    var jsonData = pm.response.json();",
-							"    var employees = jsonData.data;",
-							"    pm.expect(employees.length).greaterThan(1);",
-							"});",
-							"",
-							"pm.test(`Response contains one instance of employee ${pm.environment.get(\"id\")}`, function () {",
-							"    var jsonData = pm.response.json();",
-							"    var employees = jsonData.data;",
-							"    var found = 0",
-							"    employees.forEach(async function(employee) {",
-							"        if (employee.id === pm.environment.get(\"id\")) {",
-							"            found++;",
-							"        }",
-							"    });",
-							"    pm.expect(found).eql(1);",
+							"pm.test(\"Response must be valid and have a non-empty JSON body\", function () {\r",
+							"     pm.response.to.be.ok;\r",
+							"     pm.response.to.be.withBody;\r",
+							"     pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Successful response\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.status).to.eql(\"success\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Fetched all records\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.message).to.contain(\"All records\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has more than one employee\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    var employees = jsonData.data;\r",
+							"    pm.expect(employees.length).greaterThan(1);\r",
+							"});\r",
+							"\r",
+							"pm.test(`Response contains one instance of employee ${pm.environment.get(\"id\")}`, function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    var employees = jsonData.data;\r",
+							"    var found = 0\r",
+							"    employees.forEach(async function(employee) {\r",
+							"        if (employee.id == parseInt(pm.environment.get(\"id\"))) {\r",
+							"            found++;\r",
+							"        }\r",
+							"    });\r",
+							"    pm.expect(found).eql(1);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{employees_url}}",
+					"host": [
+						"{{employees_url}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get One Employee",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "57083c03-2b8a-4766-bd0a-b4633a66fb03",
+						"exec": [
+							"pm.test(\"Response must be valid and have a non-empty JSON body\", function () {\r",
+							"     pm.response.to.be.ok;\r",
+							"     pm.response.to.be.withBody;\r",
+							"     pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Successful response\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.status).to.eql(\"success\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Fetched one record\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.message).to.contain(\"Record has been fetched\");\r",
+							"});\r",
+							"\r",
+							"pm.test(`Employee ID is ${pm.environment.get(\"id\")}`, function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    var employee = jsonData.data;\r",
+							"    pm.expect(employee.id).eql(parseInt(pm.environment.get(\"id\")));\r",
 							"});"
 						],
 						"type": "text/javascript"
@@ -102,27 +155,140 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{url}}/employees",
+					"raw": "{{employee_url}}/{{id}}",
 					"host": [
-						"{{url}}"
+						"{{employee_url}}"
 					],
 					"path": [
-						"employees"
+						"{{id}}"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Get One Employee",
+			"name": "Update Employee",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e264bbc3-ae60-4571-8ea4-69deebfe44d8",
+						"exec": [
+							"pm.test(\"Response must be valid and have a non-empty JSON body\", function () {\r",
+							"     pm.response.to.be.ok;\r",
+							"     pm.response.to.be.withBody;\r",
+							"     pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Successful response\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.status).to.eql(\"success\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Record updated\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.message).to.contain(\"Record has been updated\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
-				"method": "GET",
+				"method": "PUT",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"{{name}}\",\r\n    \"salary\": \"{{salary}}\",\r\n    \"age\": \"{{age}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": ""
+					"raw": "{{update_url}}/{{id}}",
+					"host": [
+						"{{update_url}}"
+					],
+					"path": [
+						"{{id}}"
+					]
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Delete Employee",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5039b559-620b-4433-b8f6-709c8e5de105",
+						"exec": [
+							"pm.test(\"Response must be valid and have a non-empty JSON body\", function () {\r",
+							"     pm.response.to.be.ok;\r",
+							"     pm.response.to.be.withBody;\r",
+							"     pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Successful response\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.status).to.eql(\"success\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Record deleted\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.message).to.contain(\"Record has been deleted\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Return status nonzero\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(parseInt(jsonData.data)).greaterThan(0);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{delete_url}}/{{id}}",
+					"host": [
+						"{{delete_url}}"
+					],
+					"path": [
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "46f42550-8668-439e-b762-0b02e3df57d9",
+				"type": "text/javascript",
+				"exec": [
+					"pm.environment.set(\"id\", 1);"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "df4ce867-e0c6-4e2a-84a6-423fd0fa863c",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		}
 	],
 	"protocolProfileBehavior": {}
