@@ -60,10 +60,39 @@
 					"script": {
 						"id": "9b823313-3573-46ff-a31b-491cc3448b99",
 						"exec": [
-							"pm.test(\"Successful response\", function () {",
-							"    pm.expect(pm.response.text()).to.include(\"success\");",
+							"pm.test(\"Response must be valid and have a JSON body\", function () {",
+							"     pm.response.to.be.ok;",
+							"     pm.response.to.be.withBody;",
+							"     pm.response.to.be.json;",
 							"});",
-							""
+							"",
+							"pm.test(\"Successful response\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.status).to.eql(\"success\");",
+							"});",
+							"",
+							"pm.test(\"Fetched all records\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.contain(\"All records\");",
+							"});",
+							"",
+							"pm.test(\"Response has more than one employee\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    var employees = jsonData.data;",
+							"    pm.expect(employees.length).greaterThan(1);",
+							"});",
+							"",
+							"pm.test(`Response contains one instance of employee ${pm.environment.get(\"id\")}`, function () {",
+							"    var jsonData = pm.response.json();",
+							"    var employees = jsonData.data;",
+							"    var found = 0",
+							"    employees.forEach(async function(employee) {",
+							"        if (employee.id === pm.environment.get(\"id\")) {",
+							"            found++;",
+							"        }",
+							"    });",
+							"    pm.expect(found).eql(1);",
+							"});"
 						],
 						"type": "text/javascript"
 					}
@@ -73,18 +102,24 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://dummy.restapiexample.com/api/v1/employees",
-					"protocol": "http",
+					"raw": "{{url}}/employees",
 					"host": [
-						"dummy",
-						"restapiexample",
-						"com"
+						"{{url}}"
 					],
 					"path": [
-						"api",
-						"v1",
 						"employees"
 					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get One Employee",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
 				}
 			},
 			"response": []
