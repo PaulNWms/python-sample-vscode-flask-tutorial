@@ -90,7 +90,7 @@ stages:
   - deployment: FakeRestAPI
     pool:
       vmImage: 'Ubuntu-16.04'
-    environment: 'TEST'
+    environment: 'test'
     strategy:
       runOnce:
         deploy:
@@ -99,7 +99,7 @@ stages:
             displayName: 'Deploy Azure Web App'
             inputs:
               azureSubscription: '$(subscription)'
-              appName: 'FakeRestAPI'
+              appName: 'wiggly-api'
               appType: webApp
               package: $(Pipeline.Workspace)/drop-fakerestapi/$(Build.BuildId)-fakerestapi.zip
   - deployment: VMDeploy
