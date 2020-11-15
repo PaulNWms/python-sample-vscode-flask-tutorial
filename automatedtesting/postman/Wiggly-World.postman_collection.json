@@ -276,7 +276,8 @@
 				"id": "46f42550-8668-439e-b762-0b02e3df57d9",
 				"type": "text/javascript",
 				"exec": [
-					"pm.environment.set(\"id\", 1);"
+					"pm.environment.set(\"id\", 1);",
+					"setTimeout(function(){}, 10000);"
 				]
 			}
 		},
