@@ -17,13 +17,20 @@ stages:
       name: Hosted Ubuntu 1604
     steps:
     - task: CopyFiles@2
+      displayName: 'Copy Selenium Files'
+      inputs:
+        SourceFolder: 'automatedtesting/selenium'
+        Contents: '**'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    - task: CopyFiles@2
+      displayName: 'Copy Terraform Files'
       inputs:
         SourceFolder: 'terraform'
         Contents: '**'
         TargetFolder: '$(Build.ArtifactStagingDirectory)'
     - task: PublishBuildArtifacts@1
       inputs:
-        ArtifactName: 'drop'
+        ArtifactName: 'drop-selenium'
     - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@0
       displayName: 'Install Terraform'
     - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV1@0

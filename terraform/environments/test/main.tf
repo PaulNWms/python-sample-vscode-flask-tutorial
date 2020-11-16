@@ -4,8 +4,6 @@ provider "azurerm" {
   subscription_id = var.subscription_id
   client_id       = var.client_id
   client_secret   = var.client_secret
-  #client_certificate_path     = var.client_certificate_path
-  #client_certificate_password = var.client_certificate_password
   features {}
 }
 terraform {
