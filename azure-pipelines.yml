@@ -17,15 +17,6 @@ stages:
       name: Hosted Ubuntu 1604
     steps:
     - task: CopyFiles@2
-      displayName: 'Copy Selenium Files'
-      inputs:
-        SourceFolder: 'automatedtesting/selenium'
-        Contents: '**'
-        TargetFolder: '$(Build.ArtifactStagingDirectory)'
-    - task: PublishBuildArtifacts@1
-      inputs:
-        ArtifactName: 'drop-selenium'
-    - task: CopyFiles@2
       displayName: 'Copy Terraform Files'
       inputs:
         SourceFolder: 'terraform'
@@ -63,6 +54,16 @@ stages:
         knownHostsEntry: '52.143.70.125 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBOM+qPK8T+HlsJ5+LaXMIsoiu7smcvK+lDvtoizJzu4kEd7oSWNYymvNu64ou+BaOg4dhGFWOaoXsEDQVuRwZyg='
         sshPublicKey: '$(sshPublicKey)'
         sshKeySecureFile: 'id_rsa'
+    - task: ArchiveFiles@2
+      displayName: 'Archive Selenium Files'
+      inputs:
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)/automatedtesting/selenium'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/ui-test.zip'
+    - publish: $(Build.ArtifactStagingDirectory)/ui-test.zip
+      displayName: 'Upload UI Test'
+      artifact: drop-ui-test
     - task: ArchiveFiles@2
       displayName: 'Archive FakeRestAPI'
       inputs:
