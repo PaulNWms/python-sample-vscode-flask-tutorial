@@ -22,6 +22,9 @@ stages:
         SourceFolder: 'automatedtesting/selenium'
         Contents: '**'
         TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    - task: PublishBuildArtifacts@1
+      inputs:
+        ArtifactName: 'drop-selenium'
     - task: CopyFiles@2
       displayName: 'Copy Terraform Files'
       inputs:
@@ -30,7 +33,7 @@ stages:
         TargetFolder: '$(Build.ArtifactStagingDirectory)'
     - task: PublishBuildArtifacts@1
       inputs:
-        ArtifactName: 'drop-selenium'
+        ArtifactName: 'drop'
     - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@0
       displayName: 'Install Terraform'
     - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV1@0
