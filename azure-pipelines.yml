@@ -116,7 +116,7 @@ stages:
   - deployment: VMDeploy
     displayName: VMDeploy
     environment:
-      name: 'test'
+      name: 'wiggly-world'
       resourceName: 'wiggly-vm'
       resourceType: VirtualMachine
       #tags: 'quality-releases'
@@ -138,7 +138,7 @@ stages:
               #patterns: '**' # Optional
               #path: '$(Pipeline.Workspace)'
               artifact: drop-ui-test
-          - script: echo 'download drop-ui-test.zip to $(Pipeline.Workspace)'
+          - script: echo 'download drop-ui-test.zip'
         deploy:
           steps:
           - task: Bash@3
