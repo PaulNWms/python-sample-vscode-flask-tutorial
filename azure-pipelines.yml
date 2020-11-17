@@ -55,14 +55,14 @@ stages:
         sshPublicKey: '$(sshPublicKey)'
         sshKeySecureFile: 'id_rsa'
     - task: ArchiveFiles@2
-      displayName: 'Archive Selenium Files'
+      displayName: 'Archive UI Test'
       inputs:
         rootFolderOrFile: '$(System.DefaultWorkingDirectory)/automatedtesting/selenium'
         includeRootFolder: false
         archiveType: 'zip'
         archiveFile: '$(Build.ArtifactStagingDirectory)/ui-test.zip'
     - publish: $(Build.ArtifactStagingDirectory)/ui-test.zip
-      displayName: 'Archive UI Test'
+      displayName: 'Upload UI Test'
       artifact: drop-ui-test
     - task: ArchiveFiles@2
       displayName: 'Archive FakeRestAPI'
@@ -72,7 +72,7 @@ stages:
         archiveType: 'zip'
         archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-fakerestapi.zip'
     - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId)-fakerestapi.zip
-      displayName: 'Upload Package'
+      displayName: 'Upload FakeRestAPI'
       artifact: drop-fakerestapi
 #    - task: Bash@3
 #      displayName: 'Newman: install'
@@ -123,9 +123,22 @@ stages:
       runOnce:
         preDeploy:
           steps:
-          - download: current
+          - task: DownloadPipelineArtifact@2
+          inputs:
+            #source: 'current' # Options: current, specific
+            #project: # Required when source == Specific
+            #pipeline: # Required when source == Specific
+            #preferTriggeringPipeline: false # Optional
+            #runVersion: 'latest' # Required when source == Specific# Options: latest, latestFromBranch, specific
+            #runBranch: 'refs/heads/master' # Required when source == Specific && RunVersion == LatestFromBranch
+            #runId: # Required when source == Specific && RunVersion == Specific
+            #tags: # Optional
+            #artifact: # Optional
+            #patterns: '**' # Optional
+            #path: '$(Pipeline.Workspace)'
+            #- download: current
             artifact: drop-ui-test
-          - script: echo download  drop-ui-test
+          - script: echo 'download drop-ui-test.zip to $(Pipeline.Workspace)'
         deploy:
           steps:
           - task: Bash@3
