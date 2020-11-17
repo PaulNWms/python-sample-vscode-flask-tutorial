@@ -62,7 +62,7 @@ stages:
         archiveType: 'zip'
         archiveFile: '$(Build.ArtifactStagingDirectory)/ui-test.zip'
     - publish: $(Build.ArtifactStagingDirectory)/ui-test.zip
-      displayName: 'Upload UI Test'
+      displayName: 'Archive UI Test'
       artifact: drop-ui-test
     - task: ArchiveFiles@2
       displayName: 'Archive FakeRestAPI'
@@ -121,6 +121,11 @@ stages:
       tags: TAG NAME
     strategy:
       runOnce:
+        preDeploy:
+          steps:
+          - download: current
+            artifact: drop-ui-test
+          - script: echo download  drop-ui-test
         deploy:
           steps:
           - task: Bash@3
@@ -135,5 +140,3 @@ stages:
                 sudo apt-get install -y chromium-browser
                 pip3 install selenium
                 export PATH=$PATH:some/path
-
-
