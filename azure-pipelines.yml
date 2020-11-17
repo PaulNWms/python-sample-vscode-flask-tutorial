@@ -116,9 +116,9 @@ stages:
   - deployment: VMDeploy
     displayName: VMDeploy
     environment:
-      Name:
-      ResourceType: VirtualMachine
-      Tags: ['quality-releases']
+      name: 'test'
+      resourceType: VirtualMachine
+      tags: ['quality-releases']
     strategy:
       runOnce:
         preDeploy:
