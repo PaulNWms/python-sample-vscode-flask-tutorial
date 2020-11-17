@@ -113,6 +113,7 @@ stages:
               appName: 'wiggly-api'
               appType: 'webAppLinux'
               package: '$(Pipeline.Workspace)/drop-fakerestapi/$(Build.BuildId)-fakerestapi.zip'
+  - deployment: VMDeploy
     displayName: NAME
     environment:
       name:  ENVIRONMENT NAME
