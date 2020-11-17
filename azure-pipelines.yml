@@ -113,31 +113,30 @@ stages:
               appName: 'wiggly-api'
               appType: 'webAppLinux'
               package: '$(Pipeline.Workspace)/drop-fakerestapi/$(Build.BuildId)-fakerestapi.zip'
-  - deployment: VMDeploy
-    displayName: VMDeploy
+    displayName: NAME
     environment:
-      name:  'test'
+      name:  ENVIRONMENT NAME
       resourceType: VirtualMachine
       tags: TAG NAME
     strategy:
       runOnce:
-        preDeploy:
-          steps:
-          - task: DownloadPipelineArtifact@2
-            inputs:
-              #source: 'current' # Options: current, specific
-              #project: # Required when source == Specific
-              #pipeline: # Required when source == Specific
-              #preferTriggeringPipeline: false # Optional
-              #runVersion: 'latest' # Required when source == Specific# Options: latest, latestFromBranch, specific
-              #runBranch: 'refs/heads/master' # Required when source == Specific && RunVersion == LatestFromBranch
-              #runId: # Required when source == Specific && RunVersion == Specific
-              #tags: # Optional
-              #artifact: # Optional
-              #patterns: '**' # Optional
-              #path: '$(Pipeline.Workspace)'
-              artifact: drop-ui-test
-          - script: echo 'download drop-ui-test.zip to $(Pipeline.Workspace)'
+        # preDeploy:
+        #   steps:
+        #   - task: DownloadPipelineArtifact@2
+        #     inputs:
+        #       #source: 'current' # Options: current, specific
+        #       #project: # Required when source == Specific
+        #       #pipeline: # Required when source == Specific
+        #       #preferTriggeringPipeline: false # Optional
+        #       #runVersion: 'latest' # Required when source == Specific# Options: latest, latestFromBranch, specific
+        #       #runBranch: 'refs/heads/master' # Required when source == Specific && RunVersion == LatestFromBranch
+        #       #runId: # Required when source == Specific && RunVersion == Specific
+        #       #tags: # Optional
+        #       #artifact: # Optional
+        #       #patterns: '**' # Optional
+        #       #path: '$(Pipeline.Workspace)'
+        #       artifact: drop-ui-test
+        #   - script: echo 'download drop-ui-test.zip to $(Pipeline.Workspace)'
         deploy:
           steps:
           - task: Bash@3
