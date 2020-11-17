@@ -117,8 +117,9 @@ stages:
     displayName: VMDeploy
     environment:
       name: 'test'
+      resourceName: 'wiggly-vm'
       resourceType: VirtualMachine
-      tags: 'quality-releases'
+      #tags: 'quality-releases'
     strategy:
       runOnce:
         preDeploy:
