@@ -34,4 +34,8 @@ resource "azurerm_linux_virtual_machine" "test" {
     sku       = "16.04-LTS"
     version   = "latest"
   }
+
+  tags = {
+    "project" = "quality-releases"
+  }
 }
