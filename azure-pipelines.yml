@@ -124,20 +124,19 @@ stages:
         preDeploy:
           steps:
           - task: DownloadPipelineArtifact@2
-          inputs:
-            #source: 'current' # Options: current, specific
-            #project: # Required when source == Specific
-            #pipeline: # Required when source == Specific
-            #preferTriggeringPipeline: false # Optional
-            #runVersion: 'latest' # Required when source == Specific# Options: latest, latestFromBranch, specific
-            #runBranch: 'refs/heads/master' # Required when source == Specific && RunVersion == LatestFromBranch
-            #runId: # Required when source == Specific && RunVersion == Specific
-            #tags: # Optional
-            #artifact: # Optional
-            #patterns: '**' # Optional
-            #path: '$(Pipeline.Workspace)'
-            #- download: current
-            artifact: drop-ui-test
+            inputs:
+              #source: 'current' # Options: current, specific
+              #project: # Required when source == Specific
+              #pipeline: # Required when source == Specific
+              #preferTriggeringPipeline: false # Optional
+              #runVersion: 'latest' # Required when source == Specific# Options: latest, latestFromBranch, specific
+              #runBranch: 'refs/heads/master' # Required when source == Specific && RunVersion == LatestFromBranch
+              #runId: # Required when source == Specific && RunVersion == Specific
+              #tags: # Optional
+              #artifact: # Optional
+              #patterns: '**' # Optional
+              #path: '$(Pipeline.Workspace)'
+              artifact: drop-ui-test
           - script: echo 'download drop-ui-test.zip to $(Pipeline.Workspace)'
         deploy:
           steps:
