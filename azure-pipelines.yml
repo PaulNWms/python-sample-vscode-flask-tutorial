@@ -124,13 +124,11 @@ stages:
       tags: 'quality-releases'
     strategy:
       runOnce:
-        preDeploy:
+        deploy:
           steps:
           - task: DownloadPipelineArtifact@2
             inputs:
               artifact: drop-ui-test
-        deploy:
-          steps:
           - task: Bash@3
             inputs:
               targetType: 'inline'
@@ -142,8 +140,9 @@ stages:
                 sudo apt-get install unzip -y
                 #sudo apt-get install -y chromium-browser
                 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-                dpkg -i google-chrome-stable_current_amd64.deb --fix-missing; apt-get -fy install
+                sudo dpkg -i google-chrome-stable_current_amd64.deb --fix-missing
+                sudo apt-get -fy install
                 pip3 install selenium
                 export PATH=$PATH:some/path
                 pushd $(Pipeline.Workspace)
-                unzip ui-test.zip
+                unzip -o ui-test.zip
