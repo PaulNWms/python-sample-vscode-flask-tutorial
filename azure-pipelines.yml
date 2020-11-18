@@ -135,13 +135,12 @@ stages:
               script: |
                 #! /bin/bash
               
+                sudo add-apt-repository universe
+                sudo apt-get update
                 sudo apt-get upgrade -y
                 sudo apt-get install python3-pip -y
                 sudo apt-get install unzip -y
-                #sudo apt-get install -y chromium-browser
-                wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-                sudo dpkg -i google-chrome-stable_current_amd64.deb --fix-missing
-                sudo apt-get -fy install
+                sudo apt-get install -y chromium-browser
                 pip3 install selenium
                 wget https://chromedriver.storage.googleapis.com/2.41/chromedriver_linux64.zip
                 unzip -o chromedriver_linux64.zip
@@ -151,4 +150,5 @@ stages:
                 export PATH=$PATH:/usr/bin/chromedriver
                 pushd $(Pipeline.Workspace)
                 unzip -o ui-test.zip
-                python3 run_test.py
+                chromium-browser --headless
+                python3 run_test.py --headless
