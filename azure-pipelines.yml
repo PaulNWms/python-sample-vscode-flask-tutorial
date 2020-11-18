@@ -55,6 +55,36 @@ stages:
         knownHostsEntry: '52.143.70.125 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBOM+qPK8T+HlsJ5+LaXMIsoiu7smcvK+lDvtoizJzu4kEd7oSWNYymvNu64ou+BaOg4dhGFWOaoXsEDQVuRwZyg='
         sshPublicKey: '$(sshPublicKey)'
         sshKeySecureFile: 'id_rsa'
+    # This is probably not a best practice, but it's awesome that it works
+    - task: PowerShell@2
+      inputs:
+        name: 'getIPStep'
+        targetType: 'inline'
+        script: 'Write-Host "##vso[task.setvariable variable=publicIPAddress;isOutput=true](Get-AzureRmPublicIpAddress -ResourceGroupName wiggly-world -Name wiggly-publicip-pubip).IpAddress"'
+    - task: SSH@0
+      inputs:
+        sshEndpoint: 'adminuser@52.191.185.215'
+        runOptions: 'inline'
+        #commands: # Required when runOptions == Commands
+        #scriptPath: # Required when runOptions == Script
+        #interpreterCommand: # Used when runOptions == Inline
+        #args: # Optional
+        #failOnStdErr: true # Optional
+        inline:  |
+          #! /bin/bash
+          
+          mkdir azagent
+          cd azagent
+          curl -fkSL -o vstsagent.tar.gz https://vstsagentpackage.azureedge.net/agent/2.177.1/vsts-agent-linux-x64-2.177.1.tar.gz
+          tar -zxvf vstsagent.tar.gz
+          if [ -x "$(command -v systemctl)" ];
+          then
+             ./config.sh --deploymentpool --deploymentpoolname "Wiggly-Deployment-Group" --acceptteeeula --agent $HOSTNAME --url https://dev.azure.com/paulwilliamsredmond/ --work _work --runasservice
+             sudo ./svc.sh install
+             sudo ./svc.sh start
+          else ./config.sh --deploymentpool --deploymentpoolname "Wiggly-Deployment-Group" --acceptteeeula --agent $HOSTNAME --url https://dev.azure.com/paulwilliamsredmond/ --work _work
+             ./run.sh;
+          fi
     - task: ArchiveFiles@2
       displayName: 'Archive UI Test'
       inputs:
@@ -126,36 +156,6 @@ stages:
       runOnce:
         preDeploy:
           steps:
-          # This is probably not a best practice, but it's awesome that it works
-          - task: PowerShell@2
-            inputs:
-              name: 'getIPStep'
-              targetType: 'inline'
-              script: 'Write-Host "##vso[task.setvariable variable=publicIPAddress;isOutput=true](Get-AzureRmPublicIpAddress -ResourceGroupName wiggly-world -Name wiggly-publicip-pubip).IpAddress"'
-          - task: SSH@0
-            inputs:
-              sshEndpoint: 'adminuser@$(getIPStep.publicIPAddress)'
-              runOptions: 'inline'
-              #commands: # Required when runOptions == Commands
-              #scriptPath: # Required when runOptions == Script
-              #interpreterCommand: # Used when runOptions == Inline
-              #args: # Optional
-              #failOnStdErr: true # Optional
-              inline:  |
-                #! /bin/bash
-                
-                mkdir azagent
-                cd azagent
-                curl -fkSL -o vstsagent.tar.gz https://vstsagentpackage.azureedge.net/agent/2.177.1/vsts-agent-linux-x64-2.177.1.tar.gz
-                tar -zxvf vstsagent.tar.gz
-                if [ -x "$(command -v systemctl)" ];
-                then
-                  ./config.sh --deploymentpool --deploymentpoolname "Wiggly-Deployment-Group" --acceptteeeula --agent $HOSTNAME --url https://dev.azure.com/paulwilliamsredmond/ --work _work --runasservice
-                  sudo ./svc.sh install
-                  sudo ./svc.sh start
-                else ./config.sh --deploymentpool --deploymentpoolname "Wiggly-Deployment-Group" --acceptteeeula --agent $HOSTNAME --url https://dev.azure.com/paulwilliamsredmond/ --work _work
-                  ./run.sh;
-                fi
           #- task: DownloadPipelineArtifact@2
           #  inputs:
               #source: 'current' # Options: current, specific
