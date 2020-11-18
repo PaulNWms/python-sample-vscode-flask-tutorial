@@ -116,6 +116,8 @@ stages:
               package: '$(Pipeline.Workspace)/drop-fakerestapi/$(Build.BuildId)-fakerestapi.zip'
   - deployment: VMDeploy
     displayName: VMDeploy
+    pool:
+      vmImage: 'Ubuntu-16.04'
     environment:
       name: TEST
       resourceType: VirtualMachine
@@ -124,8 +126,8 @@ stages:
       runOnce:
         preDeploy:
           steps:
-          - task: DownloadPipelineArtifact@2
-            inputs:
+          #- task: DownloadPipelineArtifact@2
+          #  inputs:
               #source: 'current' # Options: current, specific
               #project: # Required when source == Specific
               #pipeline: # Required when source == Specific
@@ -137,7 +139,7 @@ stages:
               #artifact: # Optional
               #patterns: '**' # Optional
               #path: '$(Pipeline.Workspace)'
-              artifact: drop-ui-test
+          #    artifact: drop-ui-test
           - script: |
               #! /bin/bash
               
