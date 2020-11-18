@@ -5,8 +5,6 @@ variables:
   tfStorageAccount: 'tstate32087'
   tfContainerName: 'tstate'
   tfWorkingDirectory: '$(Build.ArtifactStagingDirectory)/environments/test'
-  resourceGroup: 'wiggle-world'
-  vm: 'wiggly-vm'
   connection: 'Wiggly World Connection'
   accessKey: '3+VLo8yNpOzW01P9QTe8alLGBIy9rCE2dWnGrX3566IRHYjOA9sZsegEaJqH6y5MlrhfBvxBa06N9jUznawG1Q=='
   newmanWorkingDirectory: '$(System.DefaultWorkingDirectory)/automatedtesting/postman'
@@ -57,11 +55,6 @@ stages:
         knownHostsEntry: '52.143.70.125 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBOM+qPK8T+HlsJ5+LaXMIsoiu7smcvK+lDvtoizJzu4kEd7oSWNYymvNu64ou+BaOg4dhGFWOaoXsEDQVuRwZyg='
         sshPublicKey: '$(sshPublicKey)'
         sshKeySecureFile: 'id_rsa'
-    - task: Bash@3
-      displayName: 'Register VM in pipeline env'
-      inputs:
-        targetType: 'inline'
-        script: 'az vm run-command invoke -g $(resourceGroup) -n $(vm) --command-id RunShellScript --scripts ''$(registerVMInPipelineEnvironment)'''
     - task: ArchiveFiles@2
       displayName: 'Archive UI Test'
       inputs:
