@@ -12,14 +12,22 @@ def login (argv, user, password):
     try:
         options = ChromeOptions()
         for arg in argv:
-            options.add_argument(arg) 
-        driver = webdriver.Chrome(options=options)
+            options.add_argument(arg)
         if '--headless' in argv:
             print ('Running the tests in headless mode...')
+            # settings are very linux-centric
+            options.add_argument("--no-sandbox")
+            options.add_argument("--disable-setuid-sandbox")
+            options.add_argument('--disable-dev-shm-usage')
+            options.add_argument("--remote-debugging-port=9222")
+            options.add_argument("--disable-extensions")
+            options.add_argument("--disable-gpu")
+            options.add_argument("start-maximized")
+            options.add_argument("disable-infobars")
+            options.binary_location = "/usr/lib/chromium-browser"
         else:
             print ('Starting the browser...')
-
-        driver = webdriver.Chrome()
+        driver = webdriver.Chrome(options=options)
         print ('Browser started successfully. Navigating to the demo page to login.')
         driver.get('https://www.saucedemo.com/')
         WebDriverWait(driver, 3).until(
@@ -28,6 +36,7 @@ def login (argv, user, password):
         driver.find_element_by_id('user-name').send_keys(user)
         driver.find_element_by_id('password').send_keys(password)
         driver.find_element_by_id('login-button').click()
+        print('login PASSED')
         return driver
     except:
         traceback.print_exc()

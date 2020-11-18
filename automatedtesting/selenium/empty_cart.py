@@ -16,6 +16,7 @@ def empty_cart(driver: webdriver):
         remove_buttons = driver.find_elements_by_class_name('cart_button')
         for remove_button in remove_buttons:
             remove_button.click()
+        print('empty_cart PASSED')
     except:
         traceback.print_exc()
         raise

@@ -16,6 +16,7 @@ def fill_cart(driver: webdriver):
         add_to_cart_buttons = driver.find_elements_by_class_name('btn_inventory')
         for add_to_cart_button in add_to_cart_buttons:
             add_to_cart_button.click()
+        print('fill_cart PASSED')
     except:
         traceback.print_exc()
         raise

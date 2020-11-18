@@ -150,5 +150,5 @@ stages:
                 export PATH=$PATH:/usr/bin/chromedriver
                 pushd $(Pipeline.Workspace)
                 unzip -o ui-test.zip
-                chromium-browser --headless
+                chromium-browser --headless --no-sandbox --disable-dev-shm-usage --disable-gpu --remote-debugging-port=9222 &
                 python3 run_test.py --headless
