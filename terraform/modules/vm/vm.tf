@@ -20,6 +20,7 @@ resource "azurerm_linux_virtual_machine" "test" {
   network_interface_ids = [
     azurerm_network_interface.test.id,
   ]
+  source_image_id = "/subscriptions/382e9492-020f-4300-b96a-8e5b88fc422a/resourceGroups/tstate/providers/Microsoft.Compute/images/wiggly-vm-image"
   admin_ssh_key {
     username   = "adminuser"
     public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC0Ol53Rp9MoyCRrcXwpuHbSXpvvHNT24dMy3NCnL8OD5bc2ywBMmAZAvc0BQoBZ8MxL9O67oaPENA/+C1UojdtHSyBfYXYZxRKiqFyrRTdYCqcFZ/brZfCxIeQJ7FWs5TKA2/CRMaudClnwZrrpKe8ihZyjEOyHT7AK3tHD00ixFnJ6M6WPwEEaRg0ZHMkrDKLa4+ikgg6d+cwWN80YJvpJUKgR+Qss7SD4aKI8lsXUf7KWNQgfGoppcAIdOpt95VFxUF5WzCNn8JT4a0xQdijftfeOgno2F7MITI3DLz3enk1Q4Ieo7nTxCnDM8KQUB+M0FDhQ6Tr6HQPEPKV75Cd"
@@ -27,12 +28,6 @@ resource "azurerm_linux_virtual_machine" "test" {
   os_disk {
     caching           = "ReadWrite"
     storage_account_type = "Standard_LRS"
-  }
-  source_image_reference {
-    publisher = "Canonical"
-    offer     = "UbuntuServer"
-    sku       = "16.04-LTS"
-    version   = "latest"
   }
 
   tags = {

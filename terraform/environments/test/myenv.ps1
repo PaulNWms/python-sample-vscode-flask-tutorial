@@ -1,0 +1,6 @@
+﻿$Env:TF_VAR_subscription_id = "382e9492-020f-4300-b96a-8e5b88fc422a"
+$Env:TF_VAR_location = "westus2"
+$Env:TF_VAR_image_resource_group = "tstate"
+$Env:TF_VAR_image = "wiggly-image"
+$Env:TF_VAR_admin_username = "adminuser"
+$Env:TF_VAR_admin_password = ""
