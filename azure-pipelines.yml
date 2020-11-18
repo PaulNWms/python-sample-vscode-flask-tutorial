@@ -143,6 +143,12 @@ stages:
                 sudo dpkg -i google-chrome-stable_current_amd64.deb --fix-missing
                 sudo apt-get -fy install
                 pip3 install selenium
-                export PATH=$PATH:some/path
+                wget https://chromedriver.storage.googleapis.com/2.41/chromedriver_linux64.zip
+                unzip -o chromedriver_linux64.zip
+                sudo mv chromedriver /usr/bin/chromedriver
+                sudo chown root:root /usr/bin/chromedriver
+                sudo chmod +x /usr/bin/chromedriver
+                export PATH=$PATH:/usr/bin/chromedriver
                 pushd $(Pipeline.Workspace)
                 unzip -o ui-test.zip
+                python3 run_test.py
