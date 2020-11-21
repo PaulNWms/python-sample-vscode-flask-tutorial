@@ -12,7 +12,7 @@ try:
     fill_cart(driver)
     go_to_cart(driver)
     empty_cart(driver)
-    print(f'{datetime.datetime.now()} UI tests PASSED')
+    print(str(datetime.datetime.now()) + ' UI tests PASSED')
 except:
-    print(f'{datetime.datetime.now()} UI tests FAILED')
+    print(str(datetime.datetime.now()) + ' UI tests FAILED')
     exit(1)

@@ -15,7 +15,7 @@ def go_to_cart(driver: webdriver):
             expected_conditions.presence_of_element_located((By.CLASS_NAME, 'shopping_cart_link'))
         )
         driver.find_element_by_class_name('shopping_cart_link').click()
-        print(f'{datetime.datetime.now()} go_to_cart PASSED')
+        print(str(datetime.datetime.now()) + ' go_to_cart PASSED')
     except:
         traceback.print_exc()
         raise

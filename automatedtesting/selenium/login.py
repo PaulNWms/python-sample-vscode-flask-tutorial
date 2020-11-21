@@ -37,7 +37,7 @@ def login (argv, user, password):
         driver.find_element_by_id('user-name').send_keys(user)
         driver.find_element_by_id('password').send_keys(password)
         driver.find_element_by_id('login-button').click()
-        print(f'{datetime.datetime.now()} login PASSED')
+        print(str(datetime.datetime.now()) + ' login PASSED')
         return driver
     except:
         traceback.print_exc()
