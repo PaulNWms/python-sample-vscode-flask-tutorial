@@ -153,4 +153,6 @@ stages:
                 chromium-browser --headless --no-sandbox --disable-dev-shm-usage --disable-gpu --remote-debugging-port=9222 &
                 sleep 2s
                 python3 run_test.py --headless | tee test_results.log
+                exit_code=$?
                 pkill chromium
+                exit exit_code
