@@ -152,7 +152,7 @@ stages:
                 unzip -o ui-test.zip
                 chromium-browser --headless --no-sandbox --disable-dev-shm-usage --disable-gpu --remote-debugging-port=9222 &
                 sleep 5s
-                python3 run_test.py --headless | sudo tee /var/log/ui-test.log
+                python3 run_test.py --headless | sudo tee -a /var/log/ui-test.log
                 exit_code=${PIPESTATUS[0]}
                 pkill chromium
                 exit $((exit_code))
