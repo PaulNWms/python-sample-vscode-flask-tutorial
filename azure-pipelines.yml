@@ -155,4 +155,4 @@ stages:
                 python3 run_test.py --headless | tee test_results.log
                 exit_code=${PIPESTATUS[0]}
                 pkill chromium
-                exit exit_code
+                exit $((exit_code))
