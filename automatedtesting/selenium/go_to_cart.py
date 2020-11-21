@@ -1,4 +1,5 @@
 # #!/usr/bin/env python
+import datetime
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.support.ui import WebDriverWait
@@ -14,7 +15,7 @@ def go_to_cart(driver: webdriver):
             expected_conditions.presence_of_element_located((By.CLASS_NAME, 'shopping_cart_link'))
         )
         driver.find_element_by_class_name('shopping_cart_link').click()
-        print('go_to_cart PASSED')
+        print(f'{datetime.datetime.now()} go_to_cart PASSED')
     except:
         traceback.print_exc()
         raise

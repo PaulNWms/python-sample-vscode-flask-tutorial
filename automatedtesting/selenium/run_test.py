@@ -1,6 +1,7 @@
 # #!/usr/bin/env python
 
 import sys
+import datetime
 from login import login
 from fill_cart import fill_cart
 from go_to_cart import go_to_cart
@@ -11,7 +12,7 @@ try:
     fill_cart(driver)
     go_to_cart(driver)
     empty_cart(driver)
-    print('UI tests PASSED')
+    print(f'{datetime.datetime.now()} UI tests PASSED')
 except:
-    print('UI tests FAILED')
+    print(f'{datetime.datetime.now()} UI tests FAILED')
     exit(1)

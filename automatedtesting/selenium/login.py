@@ -1,4 +1,5 @@
 # #!/usr/bin/env python
+import datetime
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.support.ui import WebDriverWait
@@ -36,7 +37,7 @@ def login (argv, user, password):
         driver.find_element_by_id('user-name').send_keys(user)
         driver.find_element_by_id('password').send_keys(password)
         driver.find_element_by_id('login-button').click()
-        print('login PASSED')
+        print(f'{datetime.datetime.now()} login PASSED')
         return driver
     except:
         traceback.print_exc()
