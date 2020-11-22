@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "927fbd13-e9e7-4d18-b098-3ecf972ab93b",
-		"name": "Wiggly-World",
+		"_postman_id": "aa80c590-f5fd-465c-86de-c87761c3ad6a",
+		"name": "Wiggly-World-Regression",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -11,7 +11,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "25e6c880-5703-427d-b59f-e15f04758ea4",
+						"id": "3f109d5b-7a6f-4335-9bcc-d171da810014",
 						"exec": [
 							"pm.test(\"Response must be valid and have a non-empty JSON body\", function () {\r",
 							"     pm.response.to.be.ok;\r",
@@ -23,14 +23,7 @@
 							"    var jsonData = pm.response.json();\r",
 							"    pm.expect(jsonData.status).to.eql(\"success\");\r",
 							"});\r",
-							"\r",
-							"pm.test(\"Record added\", function () {\r",
-							"    var jsonData = pm.response.json();\r",
-							"    pm.expect(jsonData.message).to.contain(\"Record has been added\");\r",
-							"});\r",
-							"\r",
-							"var json = pm.response.json();\r",
-							"pm.environment.set(\"id\", json.data.id);"
+							""
 						],
 						"type": "text/javascript"
 					}
@@ -63,7 +56,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "378c7244-795a-4e50-8545-5748c5a3d858",
+						"id": "fafe35f9-533a-4086-b715-bed3e65e564d",
 						"exec": [
 							"pm.test(\"Response must be valid and have a non-empty JSON body\", function () {\r",
 							"     pm.response.to.be.ok;\r",
@@ -75,30 +68,6 @@
 							"    var jsonData = pm.response.json();\r",
 							"    pm.expect(jsonData.status).to.eql(\"success\");\r",
 							"});\r",
-							"\r",
-							"pm.test(\"Fetched all records\", function () {\r",
-							"    var jsonData = pm.response.json();\r",
-							"    pm.expect(jsonData.message).to.contain(\"All records\");\r",
-							"});\r",
-							"\r",
-							"pm.test(\"Response has more than one employee\", function () {\r",
-							"    var jsonData = pm.response.json();\r",
-							"    var employees = jsonData.data;\r",
-							"    pm.expect(employees.length).greaterThan(1);\r",
-							"});\r",
-							"\r",
-							"pm.test(`Response contains one instance of employee ${pm.environment.get(\"id\")}`, function () {\r",
-							"    var jsonData = pm.response.json();\r",
-							"    var employees = jsonData.data;\r",
-							"    var found = 0\r",
-							"    employees.forEach(async function(employee) {\r",
-							"        if (employee.id == parseInt(pm.environment.get(\"id\"))) {\r",
-							"            found++;\r",
-							"        }\r",
-							"    });\r",
-							"    pm.expect(found).eql(1);\r",
-							"});\r",
-							"\r",
 							""
 						],
 						"type": "text/javascript"
@@ -123,7 +92,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "57083c03-2b8a-4766-bd0a-b4633a66fb03",
+						"id": "5a4de270-4198-4722-8686-c1a99d7d704f",
 						"exec": [
 							"pm.test(\"Response must be valid and have a non-empty JSON body\", function () {\r",
 							"     pm.response.to.be.ok;\r",
@@ -135,17 +104,7 @@
 							"    var jsonData = pm.response.json();\r",
 							"    pm.expect(jsonData.status).to.eql(\"success\");\r",
 							"});\r",
-							"\r",
-							"pm.test(\"Fetched one record\", function () {\r",
-							"    var jsonData = pm.response.json();\r",
-							"    pm.expect(jsonData.message).to.contain(\"Record has been fetched\");\r",
-							"});\r",
-							"\r",
-							"pm.test(`Employee ID is ${pm.environment.get(\"id\")}`, function () {\r",
-							"    var jsonData = pm.response.json();\r",
-							"    var employee = jsonData.data;\r",
-							"    pm.expect(employee.id).eql(parseInt(pm.environment.get(\"id\")));\r",
-							"});"
+							""
 						],
 						"type": "text/javascript"
 					}
@@ -172,7 +131,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "e264bbc3-ae60-4571-8ea4-69deebfe44d8",
+						"id": "787ffe93-7fd9-4213-9308-978b1a73edff",
 						"exec": [
 							"pm.test(\"Response must be valid and have a non-empty JSON body\", function () {\r",
 							"     pm.response.to.be.ok;\r",
@@ -183,11 +142,6 @@
 							"pm.test(\"Successful response\", function () {\r",
 							"    var jsonData = pm.response.json();\r",
 							"    pm.expect(jsonData.status).to.eql(\"success\");\r",
-							"});\r",
-							"\r",
-							"pm.test(\"Record updated\", function () {\r",
-							"    var jsonData = pm.response.json();\r",
-							"    pm.expect(jsonData.message).to.contain(\"Record has been updated\");\r",
 							"});\r",
 							""
 						],
@@ -225,7 +179,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "5039b559-620b-4433-b8f6-709c8e5de105",
+						"id": "381f3290-7346-4e31-86c9-42c398969a33",
 						"exec": [
 							"pm.test(\"Response must be valid and have a non-empty JSON body\", function () {\r",
 							"     pm.response.to.be.ok;\r",
@@ -236,16 +190,6 @@
 							"pm.test(\"Successful response\", function () {\r",
 							"    var jsonData = pm.response.json();\r",
 							"    pm.expect(jsonData.status).to.eql(\"success\");\r",
-							"});\r",
-							"\r",
-							"pm.test(\"Record deleted\", function () {\r",
-							"    var jsonData = pm.response.json();\r",
-							"    pm.expect(jsonData.message).to.contain(\"Record has been deleted\");\r",
-							"});\r",
-							"\r",
-							"pm.test(\"Return status nonzero\", function () {\r",
-							"    var jsonData = pm.response.json();\r",
-							"    pm.expect(parseInt(jsonData.data)).greaterThan(0);\r",
 							"});\r",
 							""
 						],
@@ -273,7 +217,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "46f42550-8668-439e-b762-0b02e3df57d9",
+				"id": "5210fa4c-a9ed-4956-8c27-8b347bfbab86",
 				"type": "text/javascript",
 				"exec": [
 					"pm.environment.set(\"id\", 1);",
@@ -284,7 +228,7 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "df4ce867-e0c6-4e2a-84a6-423fd0fa863c",
+				"id": "91fac84f-b761-4d2b-8cd2-a62efe4ee469",
 				"type": "text/javascript",
 				"exec": [
 					""

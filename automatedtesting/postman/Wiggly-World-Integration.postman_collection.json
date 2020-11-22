@@ -1,0 +1,241 @@
+{
+	"info": {
+		"_postman_id": "927fbd13-e9e7-4d18-b098-3ecf972ab93b",
+		"name": "Wiggly-World-Integration",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create Employee",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "25e6c880-5703-427d-b59f-e15f04758ea4",
+						"exec": [
+							"pm.test(\"Record added\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.message).to.contain(\"Record has been added\");\r",
+							"});\r",
+							"\r",
+							"var json = pm.response.json();\r",
+							"pm.environment.set(\"id\", json.data.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"{{name}}\",\r\n    \"salary\": \"{{salary}}\",\r\n    \"age\": \"{{age}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{create_url}}",
+					"host": [
+						"{{create_url}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Employees",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "378c7244-795a-4e50-8545-5748c5a3d858",
+						"exec": [
+							"pm.test(\"Fetched all records\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.message).to.contain(\"All records\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has more than one employee\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    var employees = jsonData.data;\r",
+							"    pm.expect(employees.length).greaterThan(1);\r",
+							"});\r",
+							"\r",
+							"pm.test(`Response contains one instance of employee ${pm.environment.get(\"id\")}`, function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    var employees = jsonData.data;\r",
+							"    var found = 0\r",
+							"    employees.forEach(async function(employee) {\r",
+							"        if (employee.id == parseInt(pm.environment.get(\"id\"))) {\r",
+							"            found++;\r",
+							"        }\r",
+							"    });\r",
+							"    pm.expect(found).eql(1);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{employees_url}}",
+					"host": [
+						"{{employees_url}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get One Employee",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "57083c03-2b8a-4766-bd0a-b4633a66fb03",
+						"exec": [
+							"pm.test(\"Fetched one record\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.message).to.contain(\"Record has been fetched\");\r",
+							"});\r",
+							"\r",
+							"pm.test(`Employee ID is ${pm.environment.get(\"id\")}`, function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    var employee = jsonData.data;\r",
+							"    pm.expect(employee.id).eql(parseInt(pm.environment.get(\"id\")));\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{employee_url}}/{{id}}",
+					"host": [
+						"{{employee_url}}"
+					],
+					"path": [
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Employee",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e264bbc3-ae60-4571-8ea4-69deebfe44d8",
+						"exec": [
+							"pm.test(\"Record updated\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.message).to.contain(\"Record has been updated\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"{{name}}\",\r\n    \"salary\": \"{{salary}}\",\r\n    \"age\": \"{{age}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{update_url}}/{{id}}",
+					"host": [
+						"{{update_url}}"
+					],
+					"path": [
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Employee",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5039b559-620b-4433-b8f6-709c8e5de105",
+						"exec": [
+							"pm.test(\"Record deleted\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.message).to.contain(\"Record has been deleted\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Return status nonzero\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(parseInt(jsonData.data)).greaterThan(0);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{delete_url}}/{{id}}",
+					"host": [
+						"{{delete_url}}"
+					],
+					"path": [
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "46f42550-8668-439e-b762-0b02e3df57d9",
+				"type": "text/javascript",
+				"exec": [
+					"pm.environment.set(\"id\", 1);",
+					"setTimeout(function(){}, 10000);"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "df4ce867-e0c6-4e2a-84a6-423fd0fa863c",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

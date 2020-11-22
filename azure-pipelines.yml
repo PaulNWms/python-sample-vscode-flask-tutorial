@@ -84,31 +84,38 @@ stages:
           #! /bin/bash
           sudo npm install -g newman
     - task: Bash@3
-      displayName: 'Newman: run'
+      displayName: 'Newman: Regression Test'
       inputs:
         targetType: 'inline'
         workingDirectory: '$(newmanWorkingDirectory)'
         script: |
           #! /bin/bash
           newman run Wiggly-World.postman_collection.json \
-                 -e Wiggly-World.postman_environment.json \
+                 -e Wiggly-World-Regression.postman_environment.json \
+                 -r "cli,junit" \
+                 --reporter-junit-export regression-test-results.json
+          
+          # The endpoint is unstable, tests will fail
+          exit 0
+    - task: Bash@3
+      displayName: 'Newman: Integration Test'
+      inputs:
+        targetType: 'inline'
+        workingDirectory: '$(newmanWorkingDirectory)'
+        script: |
+          #! /bin/bash
+          newman run Wiggly-World.postman_collection.json \
+                 -e Wiggly-World-Integration.postman_environment.json \
                  -r "cli,junit" \
                  --reporter-junit-export integration-test-results.json
           
-          # The endpoint is unstable
+          # The endpoint is unstable, tests will fail
           exit 0
     # Publish test results to Azure Pipelines
     - task: PublishTestResults@2
       inputs:
-        #testResultsFormat: 'JUnit' # Options: JUnit, NUnit, VSTest, xUnit, cTest
-        testResultsFiles: 'integration-test-results.json'
-        searchFolder: '$(newmanWorkingDirectory)' # Optional
-        #mergeTestResults: false # Optional
-        #failTaskOnFailedTests: false # Optional
-        #testRunTitle: # Optional
-        #buildPlatform: # Optional
-        #buildConfiguration: # Optional
-        #publishRunAttachments: true # Optional
+        testResultsFiles: '*-test-results.json'
+        searchFolder: '$(newmanWorkingDirectory)'
 - stage:
   jobs:
   - deployment: FakeRestAPI
