@@ -14,9 +14,15 @@ def fill_cart(driver: webdriver):
         WebDriverWait(driver, 3).until(
             expected_conditions.presence_of_element_located((By.CLASS_NAME, 'footer'))
         )
-        add_to_cart_buttons = driver.find_elements_by_class_name('btn_inventory')
-        for add_to_cart_button in add_to_cart_buttons:
-            add_to_cart_button.click()
+        products = {}
+        inventory_item_names = driver.find_elements_by_class_name('inventory_item_name')
+        for inventory_item_name in inventory_item_names:
+            add_to_cart_button = inventory_item_name.find_element_by_xpath('../../../div[@class="pricebar"]/button')
+            products[inventory_item_name.text] = add_to_cart_button
+        for product, button in products.items():
+            button.click()
+            print(str(datetime.datetime.now()) + ' "' + product + '" added to cart.')
+
         print(str(datetime.datetime.now()) + ' fill_cart PASSED')
     except:
         traceback.print_exc()
