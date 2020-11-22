@@ -90,8 +90,8 @@ stages:
         workingDirectory: '$(newmanWorkingDirectory)'
         script: |
           #! /bin/bash
-          newman run Wiggly-World.postman_collection.json \
-                 -e Wiggly-World-Regression.postman_environment.json \
+          newman run Wiggly-World-Regression.postman_collection.json \
+                 -e Wiggly-World.postman_environment.json \
                  -r "cli,junit" \
                  --reporter-junit-export regression-test-results.json
           
@@ -104,8 +104,8 @@ stages:
         workingDirectory: '$(newmanWorkingDirectory)'
         script: |
           #! /bin/bash
-          newman run Wiggly-World.postman_collection.json \
-                 -e Wiggly-World-Integration.postman_environment.json \
+          newman run Wiggly-World-Integration.postman_collection.json \
+                 -e Wiggly-World.postman_environment.json \
                  -r "cli,junit" \
                  --reporter-junit-export integration-test-results.json
           
