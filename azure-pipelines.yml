@@ -94,9 +94,18 @@ stages:
                  -e Wiggly-World.postman_environment.json \
                  -r "cli,json" \
                  --reporter-json-export integration-test-results.json
-    - publish: '$(newmanWorkingDirectory)/integration-test-results.json'
-      displayName: 'Newman: publish artifacts'
-      artifact: drop-integration-test-results
+    # Publish test results to Azure Pipelines
+    - task: PublishTestResults@2
+      inputs:
+        #testResultsFormat: 'JUnit' # Options: JUnit, NUnit, VSTest, xUnit, cTest
+        testResultsFiles: 'integration-test-results.json'
+        searchFolder: '$(newmanWorkingDirectory)' # Optional
+        #mergeTestResults: false # Optional
+        #failTaskOnFailedTests: false # Optional
+        #testRunTitle: # Optional
+        #buildPlatform: # Optional
+        #buildConfiguration: # Optional
+        #publishRunAttachments: true # Optional
 - stage:
   jobs:
   - deployment: FakeRestAPI
