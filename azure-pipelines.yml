@@ -92,8 +92,8 @@ stages:
           #! /bin/bash
           newman run Wiggly-World.postman_collection.json \
                  -e Wiggly-World.postman_environment.json \
-                 -r "cli,json" \
-                 --reporter-json-export integration-test-results.json
+                 -r "cli,junit" \
+                 --reporter-junit-export integration-test-results.json
           
           # The endpoint is unstable
           exit 0
