@@ -118,7 +118,7 @@ stages:
         testResultsFiles: '*-test-results.json'
         searchFolder: '$(newmanWorkingDirectory)'
     - task: Bash@3
-      displayName: 'Clean Up JMeter'
+      displayName: 'JMeter: Clean Source Dir'
       inputs:
         targetType: 'inline'
         workingDirectory: '$(System.DefaultWorkingDirectory)'
@@ -126,14 +126,14 @@ stages:
           #! /bin/bash
           rm -fR $(jmeterWorkingDirectory)/fakerestapi
     - task: ArchiveFiles@2
-      displayName: 'Archive JMeter Source'
+      displayName: 'JMeter: Archive Source'
       inputs:
         rootFolderOrFile: '$(jmeterWorkingDirectory)'
         includeRootFolder: false
         archiveType: 'zip'
         archiveFile: '$(Build.ArtifactStagingDirectory)/jmeter-source.zip'
     - task: PublishPipelineArtifact@1
-      displayName: 'Publish JMeter Source'
+      displayName: 'JMeter: Publish Source'
       inputs:
         targetPath: '$(Build.ArtifactStagingDirectory)/jmeter-source.zip'
         artifactName: 'drop-jmeter-source'
@@ -155,18 +155,19 @@ stages:
               appType: 'webAppLinux'
               package: '$(Pipeline.Workspace)/drop-fakerestapi/$(Build.BuildId)-fakerestapi.zip'
           - task: DownloadPipelineArtifact@2
-            displayName: 'Download JMeter Source'
+            displayName: 'JMeter: Download Source'
             inputs:
               source: 'current'
               artifact: 'drop-jmeter-source'
               path: '$(Build.ArtifactStagingDirectory)'
           - task: ExtractFiles@1
+            displayName: 'JMeter: Extract Source'
             inputs:
               archiveFilePatterns: '$(Build.ArtifactStagingDirectory)/jmeter-source.zip' 
               destinationFolder: '$(jmeterWorkingDirectory)'
               cleanDestinationFolder: true
           - task: Bash@3
-            displayName: 'JMeter: install'
+            displayName: 'JMeter: Install'
             inputs:
               targetType: 'inline'
               workingDirectory: '$(jmeterWorkingDirectory)'
@@ -193,10 +194,8 @@ stages:
               script: |
                 #! /bin/bash
                 PATH=$PATH:$(jmeterWorkingDirectory)/jmeter/bin
-                jmeter -n -t Endurance.jmx \
-                    -l $(Common.TestResultsDirectory)/load-test/Endurance_results.txt \
-                    -e -o $(Common.TestResultsDirectory)/load-test/Endurance_results
-                mv $(Common.TestResultsDirectory)/load-test/Endurance_results.txt $(Common.TestResultsDirectory)/load-test/Endurance_results
+                jmeter -n -t Endurance.jmx -l load-test/Endurance_results.txt -e -o load-test/Endurance_results
+                mv load-test/Endurance_results.txt load-test/Endurance_results
           - task: Bash@3
             displayName: 'JMeter: Stress Test'
             inputs:
@@ -205,19 +204,24 @@ stages:
               script: |
                 #! /bin/bash
                 PATH=$PATH:$(jmeterWorkingDirectory)/jmeter/bin
-                jmeter -n -t Stress.jmx \
-                    -l $(Common.TestResultsDirectory)/load-test/Stress_results.txt \
-                    -e -o $(Common.TestResultsDirectory)/load-test/Stress_results
-                mv $(Common.TestResultsDirectory)/load-test/Stress_results.txt $(Common.TestResultsDirectory)/load-test/Stress_results
+                jmeter -n -t Stress.jmx -l load-test/Stress_results.txt -e -o load-test/Stress_results
+                mv load-test/Stress_results.txt load-test/Stress_results
           - task: ArchiveFiles@2
-            displayName: 'Archive Load Tests'
+            displayName: 'JMeter: Archive Endurance Test'
             inputs:
-              rootFolderOrFile: '$(Common.TestResultsDirectory)/load-test'
+              rootFolderOrFile: '$(jmeterWorkingDirectory)/load-test/Endurance_results'
               includeRootFolder: false
               archiveType: 'zip'
-              archiveFile: '$(Build.ArtifactStagingDirectory)/load-tests.zip'
-          - publish: $(Build.ArtifactStagingDirectory)/load-tests.zip
-            displayName: 'Upload Load Tests'
+              archiveFile: '$(Build.ArtifactStagingDirectory)/load-test/Endurance_results.zip'
+          - task: ArchiveFiles@2
+            displayName: 'JMeter: Archive Stress Test'
+            inputs:
+              rootFolderOrFile: '$(jmeterWorkingDirectory)/load-test/Stress_results'
+              includeRootFolder: false
+              archiveType: 'zip'
+              archiveFile: '$(Build.ArtifactStagingDirectory)/load-test/Stress_results.zip'
+          - publish: '$(Build.ArtifactStagingDirectory)/load-test'
+            displayName: 'JMeter: Upload Test Results'
             artifact: drop-load-test
   - deployment: VMDeploy
     displayName: VMDeploy
