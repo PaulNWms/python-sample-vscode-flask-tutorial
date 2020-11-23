@@ -125,20 +125,16 @@ stages:
         workingDirectory: '$(jmeterWorkingDirectory)'
         script: |
           #! /bin/bash
-          wget https://apache.osuosl.org/jmeter/binaries/$(jmeterFile).tgz
+          wget --output-document=$(jmeterFile).tgz https://apache.osuosl.org/jmeter/binaries/$(jmeterFile).tgz
           tar -xf $(jmeterFile).tgz
           mv $(jmeterFile) jmeter
           pushd jmeter
-          ls bin
-          ls lib
           pushd lib
           wget --output-document=cmdrunner-2.2.jar https://search.maven.org/remotecontent?filepath=kg/apc/cmdrunner/2.2/cmdrunner-2.2.jar
           popd
           wget --output-document=jmeter-plugins-manager.jar https://jmeter-plugins.org/get/
           mv jmeter-plugins-manager.jar lib/ext
           java -cp ./lib/ext/jmeter-plugins-manager.jar org.jmeterplugins.repository.PluginManagerCMDInstaller
-          ls bin
-          ls lib
           bin/PluginsManagerCMD.sh install bzm-random-csv
           popd
     - task: Bash@3

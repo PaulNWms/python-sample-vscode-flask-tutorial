@@ -57,7 +57,7 @@
         <com.blazemeter.jmeter.RandomCSVDataSetConfig guiclass="com.blazemeter.jmeter.RandomCSVDataSetConfigGui" testclass="com.blazemeter.jmeter.RandomCSVDataSetConfig" testname="Random Item From Original Data Counts CSV" enabled="true">
           <stringProp name="TestPlan.comments">original_data_counts.csv is the &quot;pristine&quot; database.
 These items should not be deleted or it will break stuff.</stringProp>
-          <stringProp name="filename">C:/Users/PaulW/source/repos/udacity-devops/python-sample-vscode-flask-tutorial/automatedtesting/jmeter/original_data_counts.csv</stringProp>
+          <stringProp name="filename">original_data_counts.csv</stringProp>
           <stringProp name="fileEncoding">UTF-8</stringProp>
           <stringProp name="delimiter">,</stringProp>
           <stringProp name="variableNames"></stringProp>
