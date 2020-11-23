@@ -117,7 +117,10 @@ stages:
       inputs:
         testResultsFiles: '*-test-results.json'
         searchFolder: '$(newmanWorkingDirectory)'
-- stage:
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: '$(jmeterWorkingDirectory)'
+        artifactName: 'drop-jmeter-source'
   jobs:
   - deployment: FakeRestAPI
     pool:
@@ -134,6 +137,11 @@ stages:
               appName: 'wiggly-api'
               appType: 'webAppLinux'
               package: '$(Pipeline.Workspace)/drop-fakerestapi/$(Build.BuildId)-fakerestapi.zip'
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              source: 'current'
+              artifact: 'drop-jmeter-source'
+              path: '$(jmeterWorkingDirectory)'
           - task: Bash@3
             displayName: 'JMeter: install'
             inputs:
