@@ -117,65 +117,6 @@ stages:
       inputs:
         testResultsFiles: '*-test-results.json'
         searchFolder: '$(newmanWorkingDirectory)'
-    - task: Bash@3
-      displayName: 'JMeter: install'
-      inputs:
-        targetType: 'inline'
-        workingDirectory: '$(jmeterWorkingDirectory)'
-        script: |
-          #! /bin/bash
-          wget --output-document=$(jmeterFile).tgz https://apache.osuosl.org/jmeter/binaries/$(jmeterFile).tgz
-          tar -xf $(jmeterFile).tgz
-          mv $(jmeterFile) jmeter
-          pushd jmeter
-          pushd lib
-          wget --output-document=cmdrunner-2.2.jar https://search.maven.org/remotecontent?filepath=kg/apc/cmdrunner/2.2/cmdrunner-2.2.jar
-          popd
-          wget --output-document=jmeter-plugins-manager.jar https://jmeter-plugins.org/get/
-          mv jmeter-plugins-manager.jar lib/ext
-          java -cp ./lib/ext/jmeter-plugins-manager.jar org.jmeterplugins.repository.PluginManagerCMDInstaller
-          bin/PluginsManagerCMD.sh install bzm-random-csv
-          popd
-    - task: Bash@3
-      displayName: 'JMeter: Endurance Test'
-      inputs:
-        targetType: 'inline'
-        workingDirectory: '$(jmeterWorkingDirectory)'
-        script: |
-          #! /bin/bash
-          PATH=$PATH:$(jmeterWorkingDirectory)/jmeter/bin
-          jmeter -n -t Endurance.jmx -l Endurance_results.txt -e -o Endurance_results
-          mv Endurance_results.txt Endurance_results
-    - task: Bash@3
-      displayName: 'JMeter: Stress Test'
-      inputs:
-        targetType: 'inline'
-        workingDirectory: '$(jmeterWorkingDirectory)'
-        script: |
-          #! /bin/bash
-          PATH=$PATH:$(jmeterWorkingDirectory)/jmeter/bin
-          jmeter -n -t Stress.jmx -l Stress_results.txt -e -o Stress_results
-          mv Stress_results.txt Stress_results
-    - task: ArchiveFiles@2
-      displayName: 'Archive Endurance Test'
-      inputs:
-        rootFolderOrFile: '$(jmeterWorkingDirectory)/Endurance_results'
-        includeRootFolder: false
-        archiveType: 'zip'
-        archiveFile: '$(Build.ArtifactStagingDirectory)/Endurance_results.zip'
-    - task: ArchiveFiles@2
-      displayName: 'Archive Stress Test'
-      inputs:
-        rootFolderOrFile: '$(jmeterWorkingDirectory)/Stress_results'
-        includeRootFolder: false
-        archiveType: 'zip'
-        archiveFile: '$(Build.ArtifactStagingDirectory)/Stress_results.zip'
-    - publish: $(Build.ArtifactStagingDirectory)/Endurance_results.zip
-      displayName: 'Upload Endurance Test'
-      artifact: drop-load-test
-    - publish: $(Build.ArtifactStagingDirectory)/Stress_results.zip
-      displayName: 'Upload Stress Test'
-      artifact: drop-load-test
 - stage:
   jobs:
   - deployment: FakeRestAPI
@@ -193,6 +134,60 @@ stages:
               appName: 'wiggly-api'
               appType: 'webAppLinux'
               package: '$(Pipeline.Workspace)/drop-fakerestapi/$(Build.BuildId)-fakerestapi.zip'
+          - task: Bash@3
+            displayName: 'JMeter: install'
+            inputs:
+              targetType: 'inline'
+              workingDirectory: '$(jmeterWorkingDirectory)'
+              script: |
+                #! /bin/bash
+                wget --output-document=$(jmeterFile).tgz https://apache.osuosl.org/jmeter/binaries/$(jmeterFile).tgz
+                tar -xf $(jmeterFile).tgz
+                mv $(jmeterFile) jmeter
+                pushd jmeter
+                pushd lib
+                wget --output-document=cmdrunner-2.2.jar https://search.maven.org/remotecontent?filepath=kg/apc/cmdrunner/2.2/cmdrunner-2.2.jar
+                popd
+                wget --output-document=jmeter-plugins-manager.jar https://jmeter-plugins.org/get/
+                mv jmeter-plugins-manager.jar lib/ext
+                java -cp ./lib/ext/jmeter-plugins-manager.jar org.jmeterplugins.repository.PluginManagerCMDInstaller
+                bin/PluginsManagerCMD.sh install bzm-random-csv
+                popd
+                mkdir load-test
+          - task: Bash@3
+            displayName: 'JMeter: Endurance Test'
+            inputs:
+              targetType: 'inline'
+              workingDirectory: '$(jmeterWorkingDirectory)'
+              script: |
+                #! /bin/bash
+                PATH=$PATH:$(jmeterWorkingDirectory)/jmeter/bin
+                jmeter -n -t Endurance.jmx \
+                    -l $(Common.TestResultsDirectory)/load-test/load-test/Endurance_results.txt \
+                    -e -o $(Common.TestResultsDirectory)/load-test/Endurance_results
+                mv $(Common.TestResultsDirectory)/load-test/Endurance_results.txt $(Common.TestResultsDirectory)/load-test/Endurance_results
+          - task: Bash@3
+            displayName: 'JMeter: Stress Test'
+            inputs:
+              targetType: 'inline'
+              workingDirectory: '$(jmeterWorkingDirectory)'
+              script: |
+                #! /bin/bash
+                PATH=$PATH:$(jmeterWorkingDirectory)/jmeter/bin
+                jmeter -n -t Stress.jmx \
+                    -l $(Common.TestResultsDirectory)/load-test/Stress_results.txt \
+                    -e -o $(Common.TestResultsDirectory)/load-test/Stress_results
+                mv $(Common.TestResultsDirectory)/load-test/Stress_results.txt $(Common.TestResultsDirectory)/load-test/Stress_results
+          - task: ArchiveFiles@2
+            displayName: 'Archive Load Tests'
+            inputs:
+              rootFolderOrFile: '$(Common.TestResultsDirectory)/load-test'
+              includeRootFolder: false
+              archiveType: 'zip'
+              archiveFile: '$(Build.ArtifactStagingDirectory)/load-tests.zip'
+          - publish: $(Build.ArtifactStagingDirectory)/load-tests.zip
+            displayName: 'Upload Load Tests'
+            artifact: drop-load-test
   - deployment: VMDeploy
     displayName: VMDeploy
     pool:
