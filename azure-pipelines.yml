@@ -125,7 +125,7 @@ stages:
         workingDirectory: '$(jmeterWorkingDirectory)'
         script: |
           #! /bin/bash
-          wget https://apache.osuosl.org/jmeter/binaries/$(jmeterVersion).tgz
+          wget https://apache.osuosl.org/jmeter/binaries/$(jmeterFile).tgz
           tar -xf $(jmeterFile).tgz
           mv $(jmeterFile) jmeter
     - task: Bash@3
