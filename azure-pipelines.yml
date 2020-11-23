@@ -70,7 +70,7 @@ stages:
     - task: ArchiveFiles@2
       displayName: 'Archive FakeRestAPI'
       inputs:
-        rootFolderOrFile: '$(System.DefaultWorkingDirectory)/automatedtesting/jmeter/fakerestapi'
+        rootFolderOrFile: '$(jmeterWorkingDirectory)/fakerestapi'
         includeRootFolder: false
         archiveType: 'zip'
         archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-fakerestapi.zip'
@@ -117,9 +117,25 @@ stages:
       inputs:
         testResultsFiles: '*-test-results.json'
         searchFolder: '$(newmanWorkingDirectory)'
-    - task: PublishPipelineArtifact@1
+    - task: Bash@3
+      displayName: 'Clean Up JMeter'
       inputs:
-        targetPath: '$(jmeterWorkingDirectory)'
+        targetType: 'inline'
+        workingDirectory: '$(System.DefaultWorkingDirectory)'
+        script: |
+          #! /bin/bash
+          rm -fR $(jmeterWorkingDirectory)/fakerestapi
+    - task: ArchiveFiles@2
+      displayName: 'Archive JMeter Source'
+      inputs:
+        rootFolderOrFile: '$(jmeterWorkingDirectory)'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/jmeter-source.zip'
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publish JMeter Source'
+      inputs:
+        targetPath: '$(Build.ArtifactStagingDirectory)/jmeter-source.zip'
         artifactName: 'drop-jmeter-source'
 - stage:
   jobs:
@@ -139,10 +155,16 @@ stages:
               appType: 'webAppLinux'
               package: '$(Pipeline.Workspace)/drop-fakerestapi/$(Build.BuildId)-fakerestapi.zip'
           - task: DownloadPipelineArtifact@2
+            displayName: 'Download JMeter Source'
             inputs:
               source: 'current'
               artifact: 'drop-jmeter-source'
-              path: '$(jmeterWorkingDirectory)'
+              path: '$(Build.ArtifactStagingDirectory)'
+          - task: ExtractFiles@1
+            inputs:
+              archiveFilePatterns: '$(Build.ArtifactStagingDirectory)/jmeter-source.zip' 
+              destinationFolder: '$(jmeterWorkingDirectory)'
+              cleanDestinationFolder: true
           - task: Bash@3
             displayName: 'JMeter: install'
             inputs:
@@ -172,7 +194,7 @@ stages:
                 #! /bin/bash
                 PATH=$PATH:$(jmeterWorkingDirectory)/jmeter/bin
                 jmeter -n -t Endurance.jmx \
-                    -l $(Common.TestResultsDirectory)/load-test/load-test/Endurance_results.txt \
+                    -l $(Common.TestResultsDirectory)/load-test/Endurance_results.txt \
                     -e -o $(Common.TestResultsDirectory)/load-test/Endurance_results
                 mv $(Common.TestResultsDirectory)/load-test/Endurance_results.txt $(Common.TestResultsDirectory)/load-test/Endurance_results
           - task: Bash@3
