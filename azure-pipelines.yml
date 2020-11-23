@@ -113,7 +113,6 @@ stages:
           
           # The endpoint is unstable, some test failure is expected
           exit 0
-    Publish test results to Azure Pipelines
     - task: PublishTestResults@2
       inputs:
         testResultsFiles: '*-test-results.json'
