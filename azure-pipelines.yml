@@ -145,6 +145,7 @@ stages:
           #! /bin/bash
           PATH=$PATH:$(jmeterWorkingDirectory)/jmeter/bin
           jmeter -n -t Endurance.jmx -l Endurance_results.txt -e -o Endurance_results
+          mv Endurance_results.txt Endurance_results
     - task: Bash@3
       displayName: 'JMeter: Stress Test'
       inputs:
@@ -154,6 +155,27 @@ stages:
           #! /bin/bash
           PATH=$PATH:$(jmeterWorkingDirectory)/jmeter/bin
           jmeter -n -t Stress.jmx -l Stress_results.txt -e -o Stress_results
+          mv Stress_results.txt Stress_results
+    - task: ArchiveFiles@2
+      displayName: 'Archive Endurance Test'
+      inputs:
+        rootFolderOrFile: '$(jmeterWorkingDirectory)/Endurance_results'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/Endurance_results.zip'
+    - task: ArchiveFiles@2
+      displayName: 'Archive Stress Test'
+      inputs:
+        rootFolderOrFile: '$(jmeterWorkingDirectory)/Stress_results'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/Stress_results.zip'
+    - publish: $(Build.ArtifactStagingDirectory)/Endurance_results.zip
+      displayName: 'Upload Endurance Test'
+      artifact: drop-load-test
+    - publish: $(Build.ArtifactStagingDirectory)/Stress_results.zip
+      displayName: 'Upload Stress Test'
+      artifact: drop-load-test
 - stage:
   jobs:
   - deployment: FakeRestAPI
