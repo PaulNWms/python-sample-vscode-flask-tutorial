@@ -125,6 +125,7 @@ stages:
         workingDirectory: '$(jmeterWorkingDirectory)'
         script: |
           #! /bin/bash
+          sudo apt-get install default-jdk
           wget https://apache.osuosl.org/jmeter/binaries/$(jmeterFile).tgz
           tar -xf $(jmeterFile).tgz
           mv $(jmeterFile) jmeter
@@ -138,9 +139,7 @@ stages:
           echo $(jmeterWorkingDirectory)
           pwd
           ls
-          jmeter/bin/jmeter -n -t $(jmeterWorkingDirectory)/Endurance.jmx \
-              -l $(jmeterWorkingDirectory)/Endurance_results.txt -e \
-              -o $(jmeterWorkingDirectory)/Endurance_results
+          jmeter/bin/jmeter -n -t Endurance.jmx -l Endurance_results.txt -e -o Endurance_results
     - task: Bash@3
       displayName: 'JMeter: Stress Test'
       inputs:
