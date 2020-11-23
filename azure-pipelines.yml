@@ -24,100 +24,100 @@ stages:
         SourceFolder: 'terraform'
         Contents: '**'
         TargetFolder: '$(Build.ArtifactStagingDirectory)'
-    # - task: PublishBuildArtifacts@1
-    #   inputs:
-    #     ArtifactName: 'drop'
-    # - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@0
-    #   displayName: 'Install Terraform'
-    # - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV1@0
-    #   displayName: 'Terraform : init'
-    #   inputs:
-    #     backendServiceArm: '$(connection)'
-    #     WorkingDirectory: '$(tfWorkingDirectory)'
-    #     backendAzureRmResourceGroupName: '$(tfResourceGroup)'
-    #     backendAzureRmStorageAccountName: '$(tfStorageAccount)'
-    #     backendAzureRmContainerName: '$(tfContainerName)'
-    #     backendAzureRmKey: '$(accessKey)'
-    # - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV1@0
-    #   displayName: 'Terraform : plan'
-    #   inputs:
-    #     command: plan
-    #     workingDirectory: '$(tfWorkingDirectory)'
-    #     environmentServiceNameAzureRM: '$(connection)'
-    # - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV1@0
-    #   displayName: 'Terraform : apply'
-    #   inputs:
-    #     command: apply
-    #     workingDirectory: '$(tfWorkingDirectory)'
-    #     environmentServiceNameAzureRM: '$(connection)'
-    # # Needed for Terraform VM deployment
-    # - task: InstallSSHKey@0
-    #   displayName: 'Install SSH key on VM'
-    #   inputs:
-    #     knownHostsEntry: '52.143.70.125 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBOM+qPK8T+HlsJ5+LaXMIsoiu7smcvK+lDvtoizJzu4kEd7oSWNYymvNu64ou+BaOg4dhGFWOaoXsEDQVuRwZyg='
-    #     sshPublicKey: '$(sshPublicKey)'
-    #     sshKeySecureFile: 'id_rsa'
-    # - task: ArchiveFiles@2
-    #   displayName: 'Archive UI Test'
-    #   inputs:
-    #     rootFolderOrFile: '$(System.DefaultWorkingDirectory)/automatedtesting/selenium'
-    #     includeRootFolder: false
-    #     archiveType: 'zip'
-    #     archiveFile: '$(Build.ArtifactStagingDirectory)/ui-test.zip'
-    # - publish: $(Build.ArtifactStagingDirectory)/ui-test.zip
-    #   displayName: 'Upload UI Test'
-    #   artifact: drop-ui-test
-    # - task: ArchiveFiles@2
-    #   displayName: 'Archive FakeRestAPI'
-    #   inputs:
-    #     rootFolderOrFile: '$(System.DefaultWorkingDirectory)/automatedtesting/jmeter/fakerestapi'
-    #     includeRootFolder: false
-    #     archiveType: 'zip'
-    #     archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-fakerestapi.zip'
-    # - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId)-fakerestapi.zip
-    #   displayName: 'Upload FakeRestAPI'
-    #   artifact: drop-fakerestapi
-    # - task: Bash@3
-    #   displayName: 'Newman: install'
-    #   inputs:
-    #     targetType: 'inline'
-    #     workingDirectory: '$(newmanWorkingDirectory)'
-    #     script: |
-    #       #! /bin/bash
-    #       sudo npm install -g newman
-    # - task: Bash@3
-    #   displayName: 'Newman: Regression Test'
-    #   inputs:
-    #     targetType: 'inline'
-    #     workingDirectory: '$(newmanWorkingDirectory)'
-    #     script: |
-    #       #! /bin/bash
-    #       newman run Wiggly-World-Regression.postman_collection.json \
-    #              -e Wiggly-World.postman_environment.json \
-    #              -r "cli,junit" \
-    #              --reporter-junit-export regression-test-results.json
+    - task: PublishBuildArtifacts@1
+      inputs:
+        ArtifactName: 'drop'
+    - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@0
+      displayName: 'Install Terraform'
+    - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV1@0
+      displayName: 'Terraform : init'
+      inputs:
+        backendServiceArm: '$(connection)'
+        WorkingDirectory: '$(tfWorkingDirectory)'
+        backendAzureRmResourceGroupName: '$(tfResourceGroup)'
+        backendAzureRmStorageAccountName: '$(tfStorageAccount)'
+        backendAzureRmContainerName: '$(tfContainerName)'
+        backendAzureRmKey: '$(accessKey)'
+    - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV1@0
+      displayName: 'Terraform : plan'
+      inputs:
+        command: plan
+        workingDirectory: '$(tfWorkingDirectory)'
+        environmentServiceNameAzureRM: '$(connection)'
+    - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV1@0
+      displayName: 'Terraform : apply'
+      inputs:
+        command: apply
+        workingDirectory: '$(tfWorkingDirectory)'
+        environmentServiceNameAzureRM: '$(connection)'
+    # Needed for Terraform VM deployment
+    - task: InstallSSHKey@0
+      displayName: 'Install SSH key on VM'
+      inputs:
+        knownHostsEntry: '52.143.70.125 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBOM+qPK8T+HlsJ5+LaXMIsoiu7smcvK+lDvtoizJzu4kEd7oSWNYymvNu64ou+BaOg4dhGFWOaoXsEDQVuRwZyg='
+        sshPublicKey: '$(sshPublicKey)'
+        sshKeySecureFile: 'id_rsa'
+    - task: ArchiveFiles@2
+      displayName: 'Archive UI Test'
+      inputs:
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)/automatedtesting/selenium'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/ui-test.zip'
+    - publish: $(Build.ArtifactStagingDirectory)/ui-test.zip
+      displayName: 'Upload UI Test'
+      artifact: drop-ui-test
+    - task: ArchiveFiles@2
+      displayName: 'Archive FakeRestAPI'
+      inputs:
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)/automatedtesting/jmeter/fakerestapi'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-fakerestapi.zip'
+    - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId)-fakerestapi.zip
+      displayName: 'Upload FakeRestAPI'
+      artifact: drop-fakerestapi
+    - task: Bash@3
+      displayName: 'Newman: install'
+      inputs:
+        targetType: 'inline'
+        workingDirectory: '$(newmanWorkingDirectory)'
+        script: |
+          #! /bin/bash
+          sudo npm install -g newman
+    - task: Bash@3
+      displayName: 'Newman: Regression Test'
+      inputs:
+        targetType: 'inline'
+        workingDirectory: '$(newmanWorkingDirectory)'
+        script: |
+          #! /bin/bash
+          newman run Wiggly-World-Regression.postman_collection.json \
+                 -e Wiggly-World.postman_environment.json \
+                 -r "cli,junit" \
+                 --reporter-junit-export regression-test-results.json
           
-    #       # The endpoint is unstable, some test failure is expected
-    #       exit 0
-    # - task: Bash@3
-    #   displayName: 'Newman: Integration Test'
-    #   inputs:
-    #     targetType: 'inline'
-    #     workingDirectory: '$(newmanWorkingDirectory)'
-    #     script: |
-    #       #! /bin/bash
-    #       newman run Wiggly-World-Integration.postman_collection.json \
-    #              -e Wiggly-World.postman_environment.json \
-    #              -r "cli,junit" \
-    #              --reporter-junit-export integration-test-results.json
+          # The endpoint is unstable, some test failure is expected
+          exit 0
+    - task: Bash@3
+      displayName: 'Newman: Integration Test'
+      inputs:
+        targetType: 'inline'
+        workingDirectory: '$(newmanWorkingDirectory)'
+        script: |
+          #! /bin/bash
+          newman run Wiggly-World-Integration.postman_collection.json \
+                 -e Wiggly-World.postman_environment.json \
+                 -r "cli,junit" \
+                 --reporter-junit-export integration-test-results.json
           
-    #       # The endpoint is unstable, some test failure is expected
-    #       exit 0
-    # Publish test results to Azure Pipelines
-    # - task: PublishTestResults@2
-    #   inputs:
-    #     testResultsFiles: '*-test-results.json'
-    #     searchFolder: '$(newmanWorkingDirectory)'
+          # The endpoint is unstable, some test failure is expected
+          exit 0
+    Publish test results to Azure Pipelines
+    - task: PublishTestResults@2
+      inputs:
+        testResultsFiles: '*-test-results.json'
+        searchFolder: '$(newmanWorkingDirectory)'
     - task: Bash@3
       displayName: 'JMeter: install'
       inputs:
