@@ -148,9 +148,7 @@ stages:
         workingDirectory: '$(jmeterWorkingDirectory)'
         script: |
           #! /bin/bash
-          jmeter/bin/jmeter -n -t $(jmeterWorkingDirectory)/Stress.jmx \
-              -l $(jmeterWorkingDirectory)/Stress_results.txt -e \
-              -o $(jmeterWorkingDirectory)/Stress_results
+          jmeter/bin/jmeter -n -t Stress.jmx -l Stress_results.txt -e -o Stress_results
 - stage:
   jobs:
   - deployment: FakeRestAPI
