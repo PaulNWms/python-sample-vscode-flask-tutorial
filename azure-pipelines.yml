@@ -125,7 +125,6 @@ stages:
         workingDirectory: '$(jmeterWorkingDirectory)'
         script: |
           #! /bin/bash
-          sudo apt-get install default-jdk
           wget https://apache.osuosl.org/jmeter/binaries/$(jmeterFile).tgz
           tar -xf $(jmeterFile).tgz
           mv $(jmeterFile) jmeter
@@ -136,10 +135,8 @@ stages:
         workingDirectory: '$(jmeterWorkingDirectory)'
         script: |
           #! /bin/bash
-          echo $(jmeterWorkingDirectory)
-          pwd
-          ls
-          jmeter/bin/jmeter -n -t Endurance.jmx -l Endurance_results.txt -e -o Endurance_results
+          PATH=$PATH:$(jmeterWorkingDirectory)/jmeter/bin
+          jmeter -n -t Endurance.jmx -l Endurance_results.txt -e -o Endurance_results
     - task: Bash@3
       displayName: 'JMeter: Stress Test'
       inputs:
@@ -147,7 +144,8 @@ stages:
         workingDirectory: '$(jmeterWorkingDirectory)'
         script: |
           #! /bin/bash
-          jmeter/bin/jmeter -n -t Stress.jmx -l Stress_results.txt -e -o Stress_results
+          PATH=$PATH:$(jmeterWorkingDirectory)/jmeter/bin
+          jmeter -n -t Stress.jmx -l Stress_results.txt -e -o Stress_results
 - stage:
   jobs:
   - deployment: FakeRestAPI
