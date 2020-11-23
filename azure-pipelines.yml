@@ -132,7 +132,7 @@ stages:
           ls bin
           ls lib
           pushd lib
-          wget https://search.maven.org/remotecontent?filepath=kg/apc/cmdrunner/2.2/cmdrunner-2.2.jar
+          wget --output-document=cmdrunner-2.2.jar https://search.maven.org/remotecontent?filepath=kg/apc/cmdrunner/2.2/cmdrunner-2.2.jar
           popd
           wget --output-document=jmeter-plugins-manager.jar https://jmeter-plugins.org/get/
           mv jmeter-plugins-manager.jar lib/ext
