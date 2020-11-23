@@ -121,6 +121,7 @@ stages:
       inputs:
         targetPath: '$(jmeterWorkingDirectory)'
         artifactName: 'drop-jmeter-source'
+- stage:
   jobs:
   - deployment: FakeRestAPI
     pool:
