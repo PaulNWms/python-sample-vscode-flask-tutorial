@@ -9,7 +9,7 @@ variables:
   accessKey: '3+VLo8yNpOzW01P9QTe8alLGBIy9rCE2dWnGrX3566IRHYjOA9sZsegEaJqH6y5MlrhfBvxBa06N9jUznawG1Q=='
   newmanWorkingDirectory: '$(System.DefaultWorkingDirectory)/automatedtesting/postman'
   jmeterWorkingDirectory: '$(System.DefaultWorkingDirectory)/automatedtesting/jmeter'
-  jmeterTar: 'apache-jmeter-5.3.tgz'
+  jmeterVersion: 'apache-jmeter-5.3'
   sshPublicKey: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC0Ol53Rp9MoyCRrcXwpuHbSXpvvHNT24dMy3NCnL8OD5bc2ywBMmAZAvc0BQoBZ8MxL9O67oaPENA/+C1UojdtHSyBfYXYZxRKiqFyrRTdYCqcFZ/brZfCxIeQJ7FWs5TKA2/CRMaudClnwZrrpKe8ihZyjEOyHT7AK3tHD00ixFnJ6M6WPwEEaRg0ZHMkrDKLa4+ikgg6d+cwWN80YJvpJUKgR+Qss7SD4aKI8lsXUf7KWNQgfGoppcAIdOpt95VFxUF5WzCNn8JT4a0xQdijftfeOgno2F7MITI3DLz3enk1Q4Ieo7nTxCnDM8KQUB+M0FDhQ6Tr6HQPEPKV75Cd paulw@PAUL-DESKTOP-1'
 stages:
 - stage: Build
@@ -77,42 +77,42 @@ stages:
     - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId)-fakerestapi.zip
       displayName: 'Upload FakeRestAPI'
       artifact: drop-fakerestapi
-    - task: Bash@3
-      displayName: 'Newman: install'
-      inputs:
-        targetType: 'inline'
-        workingDirectory: '$(newmanWorkingDirectory)'
-        script: |
-          #! /bin/bash
-          sudo npm install -g newman
-    - task: Bash@3
-      displayName: 'Newman: Regression Test'
-      inputs:
-        targetType: 'inline'
-        workingDirectory: '$(newmanWorkingDirectory)'
-        script: |
-          #! /bin/bash
-          newman run Wiggly-World-Regression.postman_collection.json \
-                 -e Wiggly-World.postman_environment.json \
-                 -r "cli,junit" \
-                 --reporter-junit-export regression-test-results.json
+    # - task: Bash@3
+    #   displayName: 'Newman: install'
+    #   inputs:
+    #     targetType: 'inline'
+    #     workingDirectory: '$(newmanWorkingDirectory)'
+    #     script: |
+    #       #! /bin/bash
+    #       sudo npm install -g newman
+    # - task: Bash@3
+    #   displayName: 'Newman: Regression Test'
+    #   inputs:
+    #     targetType: 'inline'
+    #     workingDirectory: '$(newmanWorkingDirectory)'
+    #     script: |
+    #       #! /bin/bash
+    #       newman run Wiggly-World-Regression.postman_collection.json \
+    #              -e Wiggly-World.postman_environment.json \
+    #              -r "cli,junit" \
+    #              --reporter-junit-export regression-test-results.json
           
-          # The endpoint is unstable, some test failure is expected
-          exit 0
-    - task: Bash@3
-      displayName: 'Newman: Integration Test'
-      inputs:
-        targetType: 'inline'
-        workingDirectory: '$(newmanWorkingDirectory)'
-        script: |
-          #! /bin/bash
-          newman run Wiggly-World-Integration.postman_collection.json \
-                 -e Wiggly-World.postman_environment.json \
-                 -r "cli,junit" \
-                 --reporter-junit-export integration-test-results.json
+    #       # The endpoint is unstable, some test failure is expected
+    #       exit 0
+    # - task: Bash@3
+    #   displayName: 'Newman: Integration Test'
+    #   inputs:
+    #     targetType: 'inline'
+    #     workingDirectory: '$(newmanWorkingDirectory)'
+    #     script: |
+    #       #! /bin/bash
+    #       newman run Wiggly-World-Integration.postman_collection.json \
+    #              -e Wiggly-World.postman_environment.json \
+    #              -r "cli,junit" \
+    #              --reporter-junit-export integration-test-results.json
           
-          # The endpoint is unstable, some test failure is expected
-          exit 0
+    #       # The endpoint is unstable, some test failure is expected
+    #       exit 0
     # Publish test results to Azure Pipelines
     - task: PublishTestResults@2
       inputs:
@@ -125,8 +125,9 @@ stages:
         workingDirectory: '$(jmeterWorkingDirectory)'
         script: |
           #! /bin/bash
-          wget https://apache.osuosl.org/jmeter/binaries/$(jmeterTar)
-          tar -xf $(jmeterTar) --directory jmeter
+          wget https://apache.osuosl.org/jmeter/binaries/$(jmeterVersion).tgz
+          tar -xf $(jmeterVersion).tgz
+          mv $(jmeterVersion) jmeter
     - task: Bash@3
       displayName: 'JMeter: Endurance Test'
       inputs:
