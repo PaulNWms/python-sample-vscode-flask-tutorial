@@ -128,6 +128,10 @@ stages:
           wget https://apache.osuosl.org/jmeter/binaries/$(jmeterFile).tgz
           tar -xf $(jmeterFile).tgz
           mv $(jmeterFile) jmeter
+          ls jmeter/bin
+          wget --output-document=plugins-manager.jar https://jmeter-plugins.org/get/
+          mv plugins-manager.jar jmeter/lib/ext
+          jmeter/bin/PluginsManagerCMD.sh install bzm-random-csv
     - task: Bash@3
       displayName: 'JMeter: Endurance Test'
       inputs:
